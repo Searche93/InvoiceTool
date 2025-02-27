@@ -4,6 +4,12 @@ using InvoiceTool.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add config
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+builder.Configuration.AddEnvironmentVariables();
+
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -11,7 +17,6 @@ builder.Services
     .AddDomain()
     .AddApplication()
     .AddInfrastructure(builder.Configuration);
-
 
 
 var app = builder.Build();

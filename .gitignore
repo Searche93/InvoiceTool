@@ -13,6 +13,9 @@
 # appsettings.Development.json
 appsettings.Development.json
 
+# EfCoreCommands.txt
+EfCoreCommands.txt
+
 
 
 # User-specific files (MonoDevelop/Xamarin Studio)
