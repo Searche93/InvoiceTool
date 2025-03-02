@@ -1,10 +1,14 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using InvoiceTool.Application.Interfaces;
+using InvoiceTool.Application.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace InvoiceTool.Application;
 public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
+        services.AddScoped<IInvoiceService, InvoiceService>();
+
         return services;
     }
 }

@@ -9,5 +9,5 @@ public class Invoice
     public decimal TaxPrice { get; set; }
     public decimal GrossPrice { get; set; }
     public Customer Customer { get; set; } = new();
-    public List<InvoiceLine> InvoiceLines { get; set; } = [];
+    public List<InvoiceLine> InvoiceLines { get; set; } = new List<InvoiceLine>();
 }

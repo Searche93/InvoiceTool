@@ -1,4 +1,6 @@
-﻿using InvoiceTool.Infrastructure.Persistence;
+﻿using InvoiceTool.Domain.Interfaces;
+using InvoiceTool.Infrastructure.Persistence;
+using InvoiceTool.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +13,10 @@ public static class DependencyInjection
     {
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
+        
+        services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+
 
         return services;
     }

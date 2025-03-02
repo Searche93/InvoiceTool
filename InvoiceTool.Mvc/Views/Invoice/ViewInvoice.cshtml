@@ -1,0 +1,72 @@
+﻿@using InvoiceTool.Application.Models
+@using InvoiceTool.Mvc.ViewModels
+
+@model ViewInvoiceViewModel
+
+@if(Model.Invoice != null)
+{
+    <h2>Invoice</h2>
+
+    <table class="table">
+        <tr>
+            <td>Number</td>
+            <td>@Model.Invoice.Number</td>
+        </tr>
+
+        <tr>
+            <td>Date</td>
+            <td>@Model.Invoice.Date</td>
+        </tr>
+
+        <tr>
+            <td>Expiration date</td>
+            <td>@Model.Invoice.ExpirationDate</td>
+        </tr>
+
+        <tr>
+            <td>Net prijs</td>
+            <td>@Model.Invoice.NetPrice</td>
+        </tr>
+
+        <tr>
+            <td>Gross prijs</td>
+            <td>@Model.Invoice.GrossPrice</td>
+        </tr>
+
+        <tr>
+            <td>Tax prijs</td>
+            <td>@Model.Invoice.TaxPrice</td>
+        </tr>
+    </table>
+
+
+    if(Model.Invoice.InvoiceLines.Count > 0)
+    {
+        <h2>Invoice lines</h2>
+
+        <table class="table">
+
+            @foreach(InvoiceLineModel invoiceLine in Model.Invoice.InvoiceLines)
+            {
+                <tr>
+                    <td>Description</td>
+                    <td>@invoiceLine.Description</td>
+                </tr>
+
+                <tr>
+                    <td>Quantity</td>
+                    <td>@invoiceLine.Quantity</td>
+                </tr>
+
+                <tr>
+                    <td>Unit price</td>
+                    <td>@invoiceLine.UnitPrice</td>
+                </tr>
+            }
+        </table>
+    }
+}
+else
+{
+    <p>No invoice found.</p>
+}
