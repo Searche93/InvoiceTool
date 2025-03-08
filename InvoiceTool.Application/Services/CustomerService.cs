@@ -2,6 +2,7 @@
 using InvoiceTool.Application.Interfaces;
 using InvoiceTool.Application.Mapper;
 using InvoiceTool.Application.Models;
+using InvoiceTool.Domain.Entities;
 using InvoiceTool.Domain.Interfaces;
 
 namespace InvoiceTool.Application.Services;
@@ -33,5 +34,16 @@ internal class CustomerService(ICustomerRepository customerRepository) : ICustom
         var listOfCustomers = Mapper.Map<List<CustomerModel>>(customers);
 
         return listOfCustomers ?? new List<CustomerModel>();
+    }
+
+    public async Task<CustomerModel> SaveAsync(CustomerModel customerModel)
+    {
+        var customer = Mapper.Map<Customer>(customerModel);
+
+        var savedCustomer = await _customerRepository.SaveAsync(customer);
+
+        var savedCustomerModel = Mapper.Map<CustomerModel>(savedCustomer);
+
+        return savedCustomerModel;
     }
 }

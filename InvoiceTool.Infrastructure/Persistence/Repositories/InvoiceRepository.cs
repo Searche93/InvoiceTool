@@ -1,9 +1,8 @@
 ﻿using InvoiceTool.Domain.Entities;
 using InvoiceTool.Domain.Interfaces;
-using InvoiceTool.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace InvoiceTool.Infrastructure.Repositories;
+namespace InvoiceTool.Infrastructure.Persistence.Repositories;
 
 internal class InvoiceRepository(AppDbContext context) : IInvoiceRepository
 {
@@ -16,7 +15,7 @@ internal class InvoiceRepository(AppDbContext context) : IInvoiceRepository
 
     public async Task<List<Invoice>> GetAllAsync()
     {
-        var invoices = await _context.Invoices.AsNoTracking().ToListAsync<Invoice>();
+        var invoices = await _context.Invoices.AsNoTracking().ToListAsync();
 
         return invoices ?? new List<Invoice>();
     }

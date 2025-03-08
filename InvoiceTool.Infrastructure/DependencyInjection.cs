@@ -1,6 +1,6 @@
 ﻿using InvoiceTool.Domain.Interfaces;
 using InvoiceTool.Infrastructure.Persistence;
-using InvoiceTool.Infrastructure.Repositories;
+using InvoiceTool.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

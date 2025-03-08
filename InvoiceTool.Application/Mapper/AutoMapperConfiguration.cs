@@ -13,9 +13,14 @@ namespace InvoiceTool.Application.Mapper
                 c.CreateMap<Invoice, InvoiceModel>()
                     .ForMember(dest => dest.InvoiceLines, opt => opt.MapFrom(src => src.InvoiceLines));
 
+                c.CreateMap<InvoiceModel, Invoice>()
+                    .ForMember(dest => dest.InvoiceLines, opt => opt.MapFrom(src => src.InvoiceLines));
+
                 c.CreateMap<InvoiceLine, InvoiceLineModel>();
+                c.CreateMap<InvoiceLineModel, InvoiceLine>();
 
                 c.CreateMap<Customer, CustomerModel>();
+                c.CreateMap<CustomerModel, Customer>();
             });
 
             return new AutoMapper.Mapper(config);

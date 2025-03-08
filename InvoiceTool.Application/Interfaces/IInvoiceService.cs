@@ -1,5 +1,4 @@
 ﻿using InvoiceTool.Application.Models;
-using InvoiceTool.Domain.Entities;
 
 namespace InvoiceTool.Application.Interfaces;
 
