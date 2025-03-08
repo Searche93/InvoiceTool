@@ -11,9 +11,9 @@ internal class InvoiceService(IInvoiceRepository invoiceRepository) : IInvoiceSe
     private readonly IMapper Mapper = AutoMapperConfiguration.CreateMapper();
     private readonly IInvoiceRepository _invoiceRepository = invoiceRepository;
 
-    public async Task<InvoiceModel?> Get(int id)
+    public async Task<InvoiceModel?> GetAsync(int id)
     {
-        var invoice = await _invoiceRepository.Get(id);
+        var invoice = await _invoiceRepository.GetAsync(id);
 
         if (invoice == null) return null;
 
@@ -23,8 +23,15 @@ internal class InvoiceService(IInvoiceRepository invoiceRepository) : IInvoiceSe
         return invoiceModel;
     }
 
-    public Task<List<InvoiceModel>> GetAll()
+    public async Task<List<InvoiceModel>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        var invoices = await _invoiceRepository.GetAllAsync();
+
+        if (invoices == null) return new List<InvoiceModel>();
+
+
+        var listOfInvoices = Mapper.Map<List<InvoiceModel>>(invoices);
+
+        return listOfInvoices ?? new List<InvoiceModel>();
     }
 }

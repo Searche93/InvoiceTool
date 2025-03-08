@@ -11,11 +11,11 @@ public interface IInvoiceService
     /// <param name="id"></param>
     /// <returns>Invoice model</returns>
 
-    Task<InvoiceModel?> Get(int id);
+    Task<InvoiceModel?> GetAsync(int id);
 
     /// <summary>
     /// Get a list of invoices
     /// </summary>
     /// <returns>List of invoice model</returns>
-    Task<List<InvoiceModel>> GetAll();
+    Task<List<InvoiceModel>> GetAllAsync();
 }

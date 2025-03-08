@@ -1,0 +1,43 @@
+﻿@using InvoiceTool.Application.Models
+@using InvoiceTool.Mvc.ViewModels
+@using InvoiceTool.Mvc.ViewModels.Customer
+
+@model IndexCustomerViewModel
+
+<div class="text-center">
+    <h1 class="display-4">Customers</h1>
+
+    @if(Model?.Customers?.Count > 0)
+    {
+        <table class="table">
+            <tr>
+                <th>Name</th>
+                <th>Company</th>
+                <th>Postal</th>
+                <th>City</th>
+                <th>Address</th>
+                <th></th>
+            </tr>
+
+            @foreach(CustomerModel customer in Model.Customers)
+            {
+                <tr>
+                    <td>@customer.Name</td>
+                    <td>@customer.CompanyName</td>
+                    <td>@customer.PostalCode</td>
+                    <td>@customer.City</td>
+                    <td>@customer.Address</td>
+                    <td>
+                        <a asp-action="ViewCustomer" asp-controller="Customer" asp-route-id="@customer.Id">
+                            View
+                        </a>
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <p>No customers found</p>
+    }
+</div>

@@ -1,6 +1,6 @@
 ﻿using InvoiceTool.Application.Models;
 
-namespace InvoiceTool.Mvc.ViewModels;
+namespace InvoiceTool.Mvc.ViewModels.Invoice;
 
 public class ViewInvoiceViewModel
 {

@@ -14,6 +14,8 @@ namespace InvoiceTool.Application.Mapper
                     .ForMember(dest => dest.InvoiceLines, opt => opt.MapFrom(src => src.InvoiceLines));
 
                 c.CreateMap<InvoiceLine, InvoiceLineModel>();
+
+                c.CreateMap<Customer, CustomerModel>();
             });
 
             return new AutoMapper.Mapper(config);

@@ -1,0 +1,41 @@
+﻿@using InvoiceTool.Application.Models
+@using InvoiceTool.Mvc.ViewModels
+@using InvoiceTool.Mvc.ViewModels.Customer
+
+@model ViewCustomerViewModel
+
+@if (Model.Customer != null)
+{
+    <h2>Customer</h2>
+
+    <table class="table">
+        <tr>
+            <td>Name</td>
+            <td>@Model.Customer.Name</td>
+        </tr>
+
+        <tr>
+            <td>Company</td>
+            <td>@Model.Customer.CompanyName</td>
+        </tr>
+
+        <tr>
+            <td>Postalcode</td>
+            <td>@Model.Customer.PostalCode</td>
+        </tr>
+
+        <tr>
+            <td>City</td>
+            <td>@Model.Customer.City</td>
+        </tr>
+
+        <tr>
+            <td>Address</td>
+            <td>@Model.Customer.Address</td>
+        </tr>
+    </table>
+}
+else
+{
+    <p>No invoice found.</p>
+}

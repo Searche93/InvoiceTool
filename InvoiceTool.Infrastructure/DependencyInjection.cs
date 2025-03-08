@@ -13,10 +13,9 @@ public static class DependencyInjection
     {
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-
         
         services.AddScoped<IInvoiceRepository, InvoiceRepository>();
-
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
 
         return services;
     }

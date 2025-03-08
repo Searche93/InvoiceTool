@@ -9,15 +9,15 @@ internal class InvoiceRepository(AppDbContext context) : IInvoiceRepository
 {
     private readonly AppDbContext _context = context;
 
-    public async Task<Invoice?> Get(int id)
+    public async Task<Invoice?> GetAsync(int id)
     {
         return await _context.Invoices.AsNoTracking().Include(i => i.InvoiceLines).FirstOrDefaultAsync(i => i.Id == id);
     }
 
-    public async Task<List<Invoice>> GetAll()
+    public async Task<List<Invoice>> GetAllAsync()
     {
-        var result = await _context.Invoices.AsNoTracking().Include(i => i.InvoiceLines).ToListAsync<Invoice>();
+        var invoices = await _context.Invoices.AsNoTracking().ToListAsync<Invoice>();
 
-        return result ?? new List<Invoice>();
+        return invoices ?? new List<Invoice>();
     }
 }

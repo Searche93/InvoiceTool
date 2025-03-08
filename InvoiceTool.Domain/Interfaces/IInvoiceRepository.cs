@@ -10,11 +10,11 @@ public interface IInvoiceRepository
     /// <param name="id"></param>
     /// <returns>Invoice entity</returns>
 
-    Task<Invoice?> Get(int id);
+    Task<Invoice?> GetAsync(int id);
 
     /// <summary>
     /// Get a list of invoices
     /// </summary>
     /// <returns>List of invoice entity</returns>
-    Task<List<Invoice>> GetAll();
+    Task<List<Invoice>> GetAllAsync();
 }
