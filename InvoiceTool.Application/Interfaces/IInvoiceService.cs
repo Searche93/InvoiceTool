@@ -17,4 +17,11 @@ public interface IInvoiceService
     /// </summary>
     /// <returns>List of invoice model</returns>
     Task<List<InvoiceModel>> GetAllAsync();
+    
+    /// <summary>
+    /// Save an invoice
+    /// </summary>
+    /// <param name="invoiceModel"></param>
+    /// <returns>Invoice model</returns>
+    Task<InvoiceModel> SaveAsync(InvoiceModel invoiceModel);
 }

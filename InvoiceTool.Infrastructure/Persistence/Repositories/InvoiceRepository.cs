@@ -19,4 +19,27 @@ internal class InvoiceRepository(AppDbContext context) : IInvoiceRepository
 
         return invoices ?? new List<Invoice>();
     }
+
+    public async Task<Invoice> SaveAsync(Invoice invoice)
+    {
+        return invoice.Id > 0 ? await UpdateAsync(invoice) : await AddAsync(invoice);
+    }
+
+    private async Task<Invoice> AddAsync(Invoice invoice)
+    {
+        _context.Add(invoice);
+
+        await _context.SaveChangesAsync();
+
+        return invoice;
+    }
+
+    private async Task<Invoice> UpdateAsync(Invoice invoice)
+    {
+        _context.Entry(invoice).State = EntityState.Modified;
+
+        await _context.SaveChangesAsync();
+
+        return invoice;
+    }
 }

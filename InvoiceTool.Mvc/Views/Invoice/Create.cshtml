@@ -1,0 +1,38 @@
+﻿@using InvoiceTool.Mvc.ViewModels.Invoice
+
+@model CreateInvoiceViewModel
+
+
+<h2>Add invoice</h2>
+
+<label>Invoicenumber:</label>
+<input type="text" id="invoiceNumber" />
+
+<label>Factuurdatum:</label>
+<input type="date" id="invoiceDate" />
+
+<h3>Factuurregels</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Beschrijving</th>
+            <th>Aantal</th>
+            <th>Prijs per stuk</th>
+            <th>Acties</th>
+        </tr>
+    </thead>
+    <tbody id="invoiceLinesTable"></tbody>
+</table>
+
+<label>Beschrijving:</label>
+<input type="text" id="description" />
+
+<label>Aantal:</label>
+<input type="number" id="quantity" />
+
+<label>Prijs per stuk:</label>
+<input type="number" id="unitPrice" />
+
+<button onclick="addInvoiceLine()">+ Voeg toe</button>
+<button onclick="submitInvoice()">Opslaan</button>
