@@ -38,6 +38,16 @@ internal class InvoiceRepository(AppDbContext context) : IInvoiceRepository
     {
         _context.Entry(invoice).State = EntityState.Modified;
 
+        if(invoice.InvoiceLines != null)
+        {
+            foreach (var line in invoice.InvoiceLines)
+            {
+                var state = line.Id > 0 ? EntityState.Modified : EntityState.Added;
+
+                _context.Entry(line).State = state;
+            }
+        }
+
         await _context.SaveChangesAsync();
 
         return invoice;

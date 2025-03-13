@@ -1,51 +1,45 @@
 ﻿@using InvoiceTool.Mvc.ViewModels.Invoice
+@model EditInvoiceViewModel
 
-@model CreateInvoiceViewModel
+<h2>Wijzig factuur</h2>
 
+<form asp-action="Edit" method="post" id="invoiceForm">
+    <input type="hidden" asp-for="Invoice.Id" />
 
-<h2>Add invoice</h2>
-
-<form asp-action="Create" method="post" id="invoiceForm">
     <div class="form-group">
-        <label asp-for="@Model.Invoice.Number"></label>
-        <input asp-for="@Model.Invoice.Number" class="form-control" required />
+        <label asp-for="Invoice.Number"></label>
+        <input asp-for="Invoice.Number" class="form-control" required />
     </div>
 
     <div class="form-group">
-        <label asp-for="@Model.Invoice.Date"></label>
-        <input asp-for="@Model.Invoice.Date" type="date" class="form-control" required />
+        <label asp-for="Invoice.Date"></label>
+        <input asp-for="Invoice.Date" type="date" class="form-control" required />
     </div>
 
     <div class="form-group">
-        <label asp-for="@Model.Invoice.ExpirationDate"></label>
-        <input asp-for="@Model.Invoice.ExpirationDate" type="date" class="form-control" required />
-    </div>
-
-    @*
-    <div class="form-group">
-        <label asp-for="@Model.Invoice.NetPrice"></label>
-        <input asp-for="@Model.Invoice.NetPrice" class="form-control" readonly id="netPrice" />
+        <label asp-for="Invoice.ExpirationDate"></label>
+        <input asp-for="Invoice.ExpirationDate" type="date" class="form-control" required />
     </div>
 
     <div class="form-group">
-        <label asp-for="@Model.Invoice.TaxPrice"></label>
-        <input asp-for="@Model.Invoice.TaxPrice" class="form-control" readonly id="taxPrice" />
+        <label asp-for="Invoice.NetPrice"></label>
+        <input asp-for="Invoice.NetPrice" class="form-control" readonly id="netPrice" />
     </div>
 
     <div class="form-group">
-        <label asp-for="@Model.Invoice.GrossPrice"></label>
-        <input asp-for="@Model.Invoice.GrossPrice" class="form-control" readonly id="grossPrice" />
+        <label asp-for="Invoice.TaxPrice"></label>
+        <input asp-for="Invoice.TaxPrice" class="form-control" readonly id="taxPrice" />
     </div>
-    *@
 
     <div class="form-group">
-        <label asp-for="@Model.Invoice.CustomerId">Klant</label>
-        <select asp-for="@Model.Invoice.CustomerId" class="form-control">
+        <label asp-for="Invoice.GrossPrice"></label>
+        <input asp-for="Invoice.GrossPrice" class="form-control" readonly id="grossPrice" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Invoice.CustomerId">Klant</label>
+        <select asp-for="Invoice.CustomerId" class="form-control" asp-items="@(new SelectList(Model.Customers, "Id", "Name"))">
             <option value="">Selecteer een klant</option>
-            @foreach (var customer in Model.Customers)
-            {
-                <option value="@customer.Id">@customer.Name</option>
-            }
         </select>
     </div>
 
@@ -62,19 +56,35 @@
                 <th>Acties</th>
             </tr>
         </thead>
+        
         <tbody id="invoiceLinesTable"></tbody>
+
     </table>
 
     <button type="button" class="btn btn-primary" onclick="addInvoiceLine()">Regel toevoegen</button>
 
-    <input type="hidden" name="InvoiceLinesJson" id="invoiceLinesInput" />
+    <input type="hidden" name="InvoiceLinesJson" id="invoiceLinesInput" value="@Html.Raw(Json.Serialize(Model.Invoice.InvoiceLines))" />
 
     <button type="submit" class="btn btn-success">Opslaan</button>
 </form>
 
+
 @section Scripts {
     <script>
-        let invoiceLines = [];
+        $(document).ready(function() {
+            getInvoiceLines();
+        });
+
+        function getInvoiceLines() {
+            let invoiceId = $("#Invoice_Id").val();
+
+            let data = { InvoiceId: invoiceId }
+
+            GetData('/InvoiceLine/GetInvoiceLines', data, 'invoiceLinesTable');
+        }
+
+
+        let invoiceLines = @Html.Raw(Json.Serialize(Model.Invoice.InvoiceLines));
 
         function addInvoiceLine(id = 0, invoiceId = 0, description = "", unitPrice = 0, taxPercentage = 21, quantity = 1) {
             const index = invoiceLines.length;
@@ -85,7 +95,7 @@
                     <td><input type="number" class="form-control" value="${taxPercentage}" step="1" onchange="updateInvoiceLine(${index}, 'TaxPercentage', this.value)" /></td>
                     <td><input type="number" class="form-control" value="${quantity}" step="0.01" onchange="updateInvoiceLine(${index}, 'Quantity', this.value)" /></td>
                     <td id="subtotal-${index}">${(unitPrice * quantity).toFixed(2)}</td>
-                    <td><button type="button" class="btn btn-danger" onclick="removeInvoiceLine(${index})">Verwijderen</button></td>
+                    <td><button type="button" class="btn btn-danger" onclick="removeInvoiceLine(${index}, 0)">Verwijderen</button></td>
                 </tr>
             `;
 
@@ -102,9 +112,15 @@
             updateInvoiceData();
         }
 
-        function removeInvoiceLine(index) {
+        function removeInvoiceLine(index, id) {
             invoiceLines.splice(index, 1);
             document.getElementById(`row-${index}`).remove();
+
+            if(id > 0)
+            {
+                deleteData(id, '/InvoiceLine/Delete');
+            }
+
             updateInvoiceData();
         }
 

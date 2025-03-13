@@ -1,0 +1,18 @@
+﻿@using InvoiceTool.Application.Models
+
+@model List<InvoiceLineModel>
+
+@if (Model != null && Model.Count > 0)
+{
+    @foreach (var line in Model)
+    {
+        <tr id="row-@line.Id">
+            <td><input type="text" class="form-control" value="@line.Description" onchange="updateInvoiceLine(@line.Id, 'Description', this.value)" /></td>
+            <td><input type="number" class="form-control" value="@line.UnitPrice" step="0.01" onchange="updateInvoiceLine(@line.Id, 'UnitPrice', this.value)" /></td>
+            <td><input type="number" class="form-control" value="@line.TaxPercentage" step="1" onchange="updateInvoiceLine(@line.Id, 'TaxPercentage', this.value)" /></td>
+            <td><input type="number" class="form-control" value="@line.Quantity" step="0.01" onchange="updateInvoiceLine(@line.Id, 'Quantity', this.value)" /></td>
+            <td id="subtotal-@line.Id">@((line.UnitPrice * line.Quantity).ToString("F2"))</td>
+            <td><button type="button" class="btn btn-danger" onclick="removeInvoiceLine(@line.Id, @line.Id)">Verwijderen</button></td>
+        </tr>
+    }
+}

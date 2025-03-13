@@ -5,7 +5,7 @@ namespace InvoiceTool.Application.Interfaces;
 public interface ICustomerService
 {
     /// <summary>
-    /// Get a customer by its <paramref name="id"/> id
+    /// Get a customer by its <paramref name="id"/>
     /// </summary>
     /// <param name="id"></param>
     /// <returns>Customer model</returns>
@@ -21,6 +21,6 @@ public interface ICustomerService
     /// Save a customer
     /// </summary>
     /// <param name="customerModel"></param>
-    /// <returns>Customer model</returns>
+    /// <returns><paramref name="customerModel"/></returns>
     Task<CustomerModel> SaveAsync(CustomerModel customerModel);
 }

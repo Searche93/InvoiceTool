@@ -15,6 +15,7 @@ public static class DependencyInjection
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
         
         services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+        services.AddScoped<IInvoiceLineRepository, InvoiceLineRepository>();
         services.AddScoped<ICustomerRepository, CustomerRepository>();
 
         return services;

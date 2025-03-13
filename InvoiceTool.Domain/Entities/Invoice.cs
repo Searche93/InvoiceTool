@@ -8,6 +8,6 @@ public class Invoice
     public decimal NetPrice { get; set; }
     public decimal TaxPrice { get; set; }
     public decimal GrossPrice { get; set; }
-    public Customer Customer { get; set; } = new();
-    public List<InvoiceLine> InvoiceLines { get; set; } = new List<InvoiceLine>();
+    public int? CustomerId { get; set; }
+    public List<InvoiceLine>? InvoiceLines { get; set; }
 }

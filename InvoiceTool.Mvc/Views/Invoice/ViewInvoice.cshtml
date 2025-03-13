@@ -16,52 +16,53 @@
 
         <tr>
             <td>Date</td>
-            <td>@Model.Invoice.Date</td>
+            <td>@Model.Invoice.DateValue</td>
         </tr>
 
         <tr>
             <td>Expiration date</td>
-            <td>@Model.Invoice.ExpirationDate</td>
+            <td>@Model.Invoice.ExpirationDateValue</td>
         </tr>
 
         <tr>
             <td>Net prijs</td>
-            <td>@Model.Invoice.NetPrice</td>
-        </tr>
-
-        <tr>
-            <td>Gross prijs</td>
-            <td>@Model.Invoice.GrossPrice</td>
+            <td>€ @Model.Invoice.NetPrice</td>
         </tr>
 
         <tr>
             <td>Tax prijs</td>
-            <td>@Model.Invoice.TaxPrice</td>
+            <td>€ @Model.Invoice.TaxPrice</td>
+        </tr>
+
+        <tr>
+            <td>Gross prijs</td>
+            <td>€ @Model.Invoice.GrossPrice</td>
         </tr>
     </table>
-
-
-    if(Model.Invoice.InvoiceLines.Count > 0)
+    if (Model.Invoice.InvoiceLines != null && Model.Invoice.InvoiceLines.Count > 0)
     {
         <h2>Invoice lines</h2>
 
         <table class="table">
 
+            <tr>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>UnitPrice</th>
+                <th>VatPercentage</th>
+                <th>Netprice</th>
+            </tr>
+
             @foreach(InvoiceLineModel invoiceLine in Model.Invoice.InvoiceLines)
             {
                 <tr>
-                    <td>Description</td>
                     <td>@invoiceLine.Description</td>
-                </tr>
-
-                <tr>
-                    <td>Quantity</td>
                     <td>@invoiceLine.Quantity</td>
-                </tr>
-
-                <tr>
-                    <td>Unit price</td>
-                    <td>@invoiceLine.UnitPrice</td>
+                    <td>€ @invoiceLine.UnitPrice</td>
+                    <td>@invoiceLine.TaxPercentage %</td>
+                    <td>
+                        € @Math.Round(@invoiceLine.UnitPrice * @invoiceLine.Quantity, 2)
+                    </td>
                 </tr>
             }
         </table>

@@ -5,7 +5,7 @@ namespace InvoiceTool.Application.Interfaces;
 public interface IInvoiceService
 {
     /// <summary>
-    /// Get single invoice entity by it's id
+    /// Get single invoice entity by it's <paramref name="id"/>
     /// </summary>
     /// <param name="id"></param>
     /// <returns>Invoice model</returns>
@@ -22,6 +22,6 @@ public interface IInvoiceService
     /// Save an invoice
     /// </summary>
     /// <param name="invoiceModel"></param>
-    /// <returns>Invoice model</returns>
+    /// <returns><paramref name="invoiceModel"/></returns>
     Task<InvoiceModel> SaveAsync(InvoiceModel invoiceModel);
 }
