@@ -44,12 +44,20 @@ internal class InvoiceLineRepository(AppDbContext context) : IInvoiceLineReposit
         return invoiceLine;
     }
 
+
+    // Todo => still buggy.. needs to be fixed asap
     private async Task<InvoiceLine> UpdateAsync(InvoiceLine invoiceLine)
     {
-        _context.Entry(invoiceLine).State = EntityState.Modified;
+        var existingLine = await _context.InvoiceLines.FindAsync(invoiceLine.Id);
+
+        if (existingLine == null)
+            return invoiceLine;
+
+        _context.Entry(existingLine).CurrentValues.SetValues(invoiceLine);
 
         await _context.SaveChangesAsync();
 
-        return invoiceLine;
+        return existingLine;
     }
+
 }

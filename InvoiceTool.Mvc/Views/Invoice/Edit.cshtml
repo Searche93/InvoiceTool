@@ -63,7 +63,7 @@
 
     <button type="button" class="btn btn-primary" onclick="addInvoiceLine()">Regel toevoegen</button>
 
-    <input type="hidden" name="InvoiceLinesJson" id="invoiceLinesInput" value="@Html.Raw(Json.Serialize(Model.Invoice.InvoiceLines))" />
+    <input type="hidden" name="InvoiceLinesJson" id="invoiceLinesInput" value='@Html.Raw(Json.Serialize(Model.Invoice.InvoiceLines))' />
 
     <button type="submit" class="btn btn-success">Opslaan</button>
 </form>
@@ -71,9 +71,12 @@
 
 @section Scripts {
     <script>
+        let invoiceLines = @Html.Raw(Json.Serialize(Model.Invoice.InvoiceLines));
+
         $(document).ready(function() {
             getInvoiceLines();
         });
+
 
         function getInvoiceLines() {
             let invoiceId = $("#Invoice_Id").val();
@@ -84,45 +87,48 @@
         }
 
 
-        let invoiceLines = @Html.Raw(Json.Serialize(Model.Invoice.InvoiceLines));
 
-        function addInvoiceLine(id = 0, invoiceId = 0, description = "", unitPrice = 0, taxPercentage = 21, quantity = 1) {
-            const index = invoiceLines.length;
-            const newRow = `
-                <tr id="row-${index}">
-                    <td><input type="text" class="form-control" value="${description}" onchange="updateInvoiceLine(${index}, 'Description', this.value)" /></td>
-                    <td><input type="number" class="form-control" value="${unitPrice}" step="0.01" onchange="updateInvoiceLine(${index}, 'UnitPrice', this.value)" /></td>
-                    <td><input type="number" class="form-control" value="${taxPercentage}" step="1" onchange="updateInvoiceLine(${index}, 'TaxPercentage', this.value)" /></td>
-                    <td><input type="number" class="form-control" value="${quantity}" step="0.01" onchange="updateInvoiceLine(${index}, 'Quantity', this.value)" /></td>
-                    <td id="subtotal-${index}">${(unitPrice * quantity).toFixed(2)}</td>
-                    <td><button type="button" class="btn btn-danger" onclick="removeInvoiceLine(${index}, 0)">Verwijderen</button></td>
-                </tr>
-            `;
 
-            invoiceLines.push({ Id: id, InvoiceId: invoiceId, Description: description, UnitPrice: unitPrice, TaxPercentage: taxPercentage, Quantity: quantity });
-            document.getElementById("invoiceLinesTable").insertAdjacentHTML('beforeend', newRow);
-            updateInvoiceData();
+        // Todo => cleanup method
+        function addInvoiceLine() {
+            let invoiceId = $("#Invoice_Id").val();
+
+            let newLine = {
+                InvoiceId: invoiceId,
+                Description: "",
+                UnitPrice: 0,
+                TaxPercentage: 21,
+                Quantity: 1
+            };
+
+            fetch('/InvoiceLine/Save', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(newLine)
+            })
+            .then(response => response.json())
+            .then(line => {
+                getInvoiceLines();
+            })
+            .catch(error => console.error("Fout bij toevoegen:", error));
         }
 
-        function updateInvoiceLine(index, field, value) {
-            invoiceLines[index][field] = field === 'UnitPrice' || field === 'Quantity' || field === 'TaxPercentage' ? parseFloat(value) : value;
-            const unitPrice = invoiceLines[index].UnitPrice;
-            const quantity = invoiceLines[index].Quantity;
-            document.getElementById(`subtotal-${index}`).innerText = (unitPrice * quantity).toFixed(2);
-            updateInvoiceData();
+
+
+        function updateInvoiceLine(id, field, value) {
+            let updatedLine = { Id: id };
+            updatedLine[field] = value;
+
+            fetch(`/InvoiceLine/Save`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(updatedLine)
+            })
+            .catch(error => console.error("Fout bij updaten:", error));
         }
 
-        function removeInvoiceLine(index, id) {
-            invoiceLines.splice(index, 1);
-            document.getElementById(`row-${index}`).remove();
-
-            if(id > 0)
-            {
-                deleteData(id, '/InvoiceLine/Delete');
-            }
-
-            updateInvoiceData();
-        }
+      
+        
 
         function updateInvoiceData() {
             let netPrice = 0;

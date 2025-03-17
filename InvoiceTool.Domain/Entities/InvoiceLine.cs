@@ -7,5 +7,5 @@ public class InvoiceLine
     public decimal UnitPrice { get; set; }
     public int TaxPercentage { get; set; }
     public decimal Quantity { get; set; }
-    public Invoice Invoice { get; set; } = new();
+    public Invoice Invoice { get; set; } = null!;
 }

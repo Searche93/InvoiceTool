@@ -36,20 +36,15 @@ internal class InvoiceRepository(AppDbContext context) : IInvoiceRepository
 
     private async Task<Invoice> UpdateAsync(Invoice invoice)
     {
-        _context.Entry(invoice).State = EntityState.Modified;
+        var existingInvoice = await _context.Invoices.FindAsync(invoice.Id);
 
-        if(invoice.InvoiceLines != null)
-        {
-            foreach (var line in invoice.InvoiceLines)
-            {
-                var state = line.Id > 0 ? EntityState.Modified : EntityState.Added;
+        if (existingInvoice == null)
+            return invoice;
 
-                _context.Entry(line).State = state;
-            }
-        }
+        _context.Entry(existingInvoice).CurrentValues.SetValues(invoice);
 
         await _context.SaveChangesAsync();
 
-        return invoice;
+        return existingInvoice;
     }
 }
