@@ -44,8 +44,6 @@ internal class InvoiceLineRepository(AppDbContext context) : IInvoiceLineReposit
         return invoiceLine;
     }
 
-
-    // Todo => still buggy.. needs to be fixed asap
     private async Task<InvoiceLine> UpdateAsync(InvoiceLine invoiceLine)
     {
         var existingLine = await _context.InvoiceLines.FindAsync(invoiceLine.Id);
@@ -59,5 +57,4 @@ internal class InvoiceLineRepository(AppDbContext context) : IInvoiceLineReposit
 
         return existingLine;
     }
-
 }

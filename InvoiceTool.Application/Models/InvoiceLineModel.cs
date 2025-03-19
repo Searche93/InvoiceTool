@@ -8,4 +8,5 @@ public class InvoiceLineModel
     public decimal UnitPrice { get; set; }
     public int TaxPercentage { get; set; }
     public decimal Quantity { get; set; }
+    public string NetPrice => (UnitPrice * Quantity).ToString("F2");
 }

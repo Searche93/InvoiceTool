@@ -71,28 +71,22 @@
 
 @section Scripts {
     <script>
+        let invoiceId = $("#Invoice_Id").val();
         let invoiceLines = @Html.Raw(Json.Serialize(Model.Invoice.InvoiceLines));
 
         $(document).ready(function() {
             getInvoiceLines();
         });
 
-
         function getInvoiceLines() {
             let invoiceId = $("#Invoice_Id").val();
 
             let data = { InvoiceId: invoiceId }
 
-            GetData('/InvoiceLine/GetInvoiceLines', data, 'invoiceLinesTable');
+            getData('@Url.Action("GetInvoiceLines", "InvoiceLine")', data, 'invoiceLinesTable');
         }
 
-
-
-
-        // Todo => cleanup method
         function addInvoiceLine() {
-            let invoiceId = $("#Invoice_Id").val();
-
             let newLine = {
                 InvoiceId: invoiceId,
                 Description: "",
@@ -101,34 +95,21 @@
                 Quantity: 1
             };
 
-            fetch('/InvoiceLine/Save', {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(newLine)
-            })
-            .then(response => response.json())
-            .then(line => {
-                getInvoiceLines();
-            })
-            .catch(error => console.error("Fout bij toevoegen:", error));
+            saveData('@Url.Action("Save", "InvoiceLine")', newLine, getInvoiceLines);
         }
 
+        function updateInvoiceLine(id) {
+            let updatedLine = { 
+                Id: id,
+                InvoiceId: invoiceId,
+                Description: $(`#description_${id}`).val(),
+                UnitPrice: $(`#unit-price_${id}`).val(),
+                TaxPercentage: $(`#tax-percentage_${id}`).val(),
+                Quantity: $(`#quantity_${id}`).val()
+            };
 
-
-        function updateInvoiceLine(id, field, value) {
-            let updatedLine = { Id: id };
-            updatedLine[field] = value;
-
-            fetch(`/InvoiceLine/Save`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(updatedLine)
-            })
-            .catch(error => console.error("Fout bij updaten:", error));
+            saveData('@Url.Action("Save", "InvoiceLine")', updatedLine, getInvoiceLines);
         }
-
-      
-        
 
         function updateInvoiceData() {
             let netPrice = 0;
@@ -143,6 +124,12 @@
             document.getElementById("invoiceForm").addEventListener("submit", function () {
                 document.getElementById("invoiceLinesInput").value = JSON.stringify(invoiceLines);
             });
+        }
+
+        function removeInvoiceLine(id) {
+            let url = '@Url.Action("Delete", "InvoiceLine")';
+
+            deleteData(`${url}?id=${id}`, id, getInvoiceLines);
         }
     </script>
 }

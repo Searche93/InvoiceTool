@@ -1,50 +1,48 @@
-﻿function GetData(url, dataObject, resultDiv = null, async = true) {
-    let result = (resultDiv != null) ? resultDiv : "div_Results";
-
-    $.ajax({
-        url: url,
-        async, async,
-        type: "POST",
-        async: false,
-        dataType: "html",
-        data: dataObject,
-        success: function (data) {
-            $(`#${result}`).html(data);
+﻿function getData(url, dataObject, resultDiv = "div_Results") {
+    fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
         },
-        error: function (data) {
-            let errorMsg = `${data.error}`;
-
-            console.log(errorMsg);
+        body: new URLSearchParams(dataObject)
+    })
+    .then(response => {
+        if (!response.ok) {
+            console.log(`HTTP error! Status: ${response.status}`);
         }
-    });
+        return response.text();
+    })
+    .then(data => {
+        if (document.getElementById(resultDiv)) {
+            document.getElementById(resultDiv).innerHTML = data;
+        } else {
+            console.warn(`Element met ID '${resultDiv}' niet gevonden.`);
+        }
+    })
+    .catch(error => console.error(`Fout bij ophalen van ${url}:`, error));
 }
 
+function saveData(url, data, callback) {
+    fetch(`${url}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (callback) callback();
+        })
+        .catch(error => console.error(`Error saving in ${url}:`, error));
+}
 
-function deleteData(id, url) {
-    if (id == null) {
-        console.log("Id is leeg");
-    }
-
-    $.ajax({
-        url: url,
-        type: "POST",
-        dataType: "json",
-        async: true,
-        data: {
-            id: id,
-        },
-        success: function (data) {
-            console.log('data', data);
-            if (data.success) {
-                console.log(data.message);
-            } else {
-                let errorMsg = `Error deleting data: ${data.message}`;
-                console.log(errorMsg);
-            }
-        },
-        error: function (data) {
-            let errorMsg = `Error deleting data: ${data.message}`;
-            console.log(errorMsg);
-        }
-    });
+function deleteData(url, callback) {
+    fetch(`${url}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+    })
+    .then(response => response.json())
+        .then(data => {
+        if (callback) callback();
+    })
+    .catch(error => console.error(`Error deleting in ${url}:`, error));
 }
