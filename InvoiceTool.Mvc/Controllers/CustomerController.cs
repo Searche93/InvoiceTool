@@ -1,34 +1,38 @@
-﻿using InvoiceTool.Application.Interfaces;
-using InvoiceTool.Application.Models;
+﻿using InvoiceTool.Application.Models;
+using InvoiceTool.Application.UseCases.Customers;
 using InvoiceTool.Mvc.ViewModels.Customer;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvoiceTool.Mvc.Controllers;
 
-public class CustomerController(ICustomerService customerService) : Controller
+public class CustomerController(
+    GetAllCustomers getAllCustomers,
+    GetCustomerById getCustomerById,
+    CreateCustomer createCustomer,
+    EditCustomer editCustomer
+
+) : Controller
 {
-    private readonly ICustomerService _customerService = customerService;
+
+    private readonly GetAllCustomers _getAllCustomers = getAllCustomers;
+    private readonly GetCustomerById _getCustomerById = getCustomerById;
+    private readonly CreateCustomer _createCustomer = createCustomer;
+    private readonly EditCustomer _editCustomer = editCustomer;
 
     public async Task<IActionResult> IndexAsync()
     {
-        var customers = await _customerService.GetAllAsync();
+        var customers = await _getAllCustomers.Execute();
 
-        var customerViewModel = new IndexCustomerViewModel
-        {
-            Customers = customers
-        };
+        var customerViewModel = new IndexCustomerViewModel { Customers = customers };
 
         return View(customerViewModel);
     }
 
     public async Task<IActionResult> ViewCustomer(int id)
     {
-        var customer = await _customerService.GetAsync(id);
+        var customer = await _getCustomerById.Execute(id);
 
-        var customerViewModel = new ViewCustomerViewModel
-        {
-            Customer = customer
-        };
+        var customerViewModel = new ViewCustomerViewModel { Customer = customer };
 
         return View(customerViewModel);
     }
@@ -44,7 +48,7 @@ public class CustomerController(ICustomerService customerService) : Controller
     {
         if (ModelState.IsValid)
         {
-            await _customerService.SaveAsync(customer);
+            await _createCustomer.Execute(customer);
 
             return RedirectToAction(nameof(Index));
         }
@@ -52,14 +56,11 @@ public class CustomerController(ICustomerService customerService) : Controller
         return View(customer);
     }
 
-    public async Task <IActionResult> Edit(int id)
+    public async Task<IActionResult> Edit(int id)
     {
-        var customer = await _customerService.GetAsync(id);
+        var customer = await _getCustomerById.Execute(id);
 
-        var editCustomerViewModel = new EditCustomerViewModel
-        {
-            Customer = customer
-        };
+        var editCustomerViewModel = new EditCustomerViewModel { Customer = customer };
 
         return View(editCustomerViewModel);
     }
@@ -70,7 +71,7 @@ public class CustomerController(ICustomerService customerService) : Controller
     {
         if (ModelState.IsValid)
         {
-            await _customerService.SaveAsync(customer);
+            await _editCustomer.Execute(customer);
 
             return RedirectToAction(nameof(Index));
         }

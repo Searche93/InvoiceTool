@@ -9,6 +9,10 @@ public class InvoiceLineController(IInvoiceLineService invoiceLineService) : Con
     private readonly IInvoiceLineService _invoiceLineService = invoiceLineService;
 
 
+    // Todo 
+    // - Use UseCases
+    // - Calculate the invoice cost on saving a invoice line
+
     [HttpPost]
     public async Task<IActionResult> GetInvoiceLines(int invoiceId)
     {

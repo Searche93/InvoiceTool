@@ -14,4 +14,8 @@
     <ProjectReference Include="..\InvoiceTool.Domain\InvoiceTool.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCases\InvoiceLines\" />
+  </ItemGroup>
+
 </Project>

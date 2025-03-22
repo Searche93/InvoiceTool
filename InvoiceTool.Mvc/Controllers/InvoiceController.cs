@@ -1,31 +1,41 @@
 ﻿using InvoiceTool.Application.Interfaces;
 using InvoiceTool.Application.Models;
+using InvoiceTool.Application.UseCases.Customers;
+using InvoiceTool.Application.UseCases.Invoices;
 using InvoiceTool.Mvc.ViewModels.Invoice;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace InvoiceTool.Mvc.Controllers;
 
-public class InvoiceController(IInvoiceService invoiceService, ICustomerService customerService) : Controller
+public class InvoiceController(
+    GetAllInvoices getAllInvoices,
+    GetInvoiceById getInvoiceById,
+    CreateInvoice createInvoice,
+    EditInvoice editInvoice,
+
+    GetAllCustomers getAllCustomers
+) : Controller
 {
-    private readonly IInvoiceService _invoiceService = invoiceService;
-    private readonly ICustomerService _customerService = customerService;
+    private readonly GetAllInvoices _getAllInvoices = getAllInvoices;
+    private readonly GetInvoiceById _getInvoiceById = getInvoiceById;
+    private readonly CreateInvoice _createInvoice = createInvoice;
+    private readonly EditInvoice _editInvoice = editInvoice;
+ 
+    private readonly GetAllCustomers _getAllCustomers = getAllCustomers;
 
     public async Task<IActionResult> Index()
     {
-        var invoices = await _invoiceService.GetAllAsync();
+        var invoices = await _getAllInvoices.Execute();
 
-        var invoiceViewModel = new IndexInvoiceViewModel
-        {
-            Invoices = invoices
-        };
+        var invoiceViewModel = new IndexInvoiceViewModel { Invoices = invoices };
 
         return View(invoiceViewModel);
     }
 
     public async Task<IActionResult> ViewInvoice(int id)
     {
-        var invoice = await _invoiceService.GetAsync(id);
+        var invoice = await _getInvoiceById.Execute(id);
 
         var invoiceViewModel = new ViewInvoiceViewModel
         {
@@ -37,10 +47,7 @@ public class InvoiceController(IInvoiceService invoiceService, ICustomerService 
 
     public async Task<IActionResult> Create()
     {
-        var model = new CreateInvoiceViewModel
-        {
-            Customers = await _customerService.GetAllAsync()
-        };
+        var model = new CreateInvoiceViewModel { Customers = await _getAllCustomers.Execute() };
 
         return View(model);
     }
@@ -50,20 +57,15 @@ public class InvoiceController(IInvoiceService invoiceService, ICustomerService 
     {
         if (!ModelState.IsValid)
         {
-            model.Customers = await _customerService.GetAllAsync();
+            model.Customers = await _getAllCustomers.Execute();
+
             return View(model.Invoice);
         }
 
-        model.Invoice.InvoiceLines = Request.Form.TryGetValue("InvoiceLinesJson", out var invoiceLinesJson) && !string.IsNullOrWhiteSpace(invoiceLinesJson)
-            ? model.Invoice.InvoiceLines = JsonConvert.DeserializeObject<List<InvoiceLineModel>>(invoiceLinesJson) ?? new List<InvoiceLineModel>()
-            : model.Invoice.InvoiceLines = new List<InvoiceLineModel>();
+        var invoiceLines = GenerateInvoiceLines();
 
 
-        model.Invoice.NetPrice = CalculateNetPrice(model.Invoice.InvoiceLines);
-        model.Invoice.TaxPrice = CalculateTaxAmount(model.Invoice.InvoiceLines);
-        model.Invoice.GrossPrice = CalculateGrossPrice(model.Invoice.InvoiceLines);
-
-        await _invoiceService.SaveAsync(model.Invoice);
+        await _createInvoice.Execute(model.Invoice, invoiceLines);
 
         return RedirectToAction("Index");
     }
@@ -71,7 +73,8 @@ public class InvoiceController(IInvoiceService invoiceService, ICustomerService 
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
-        var invoice = await _invoiceService.GetAsync(id);
+        var invoice = await _getInvoiceById.Execute(id);
+
         if (invoice == null)
         {
             return NotFound();
@@ -80,7 +83,7 @@ public class InvoiceController(IInvoiceService invoiceService, ICustomerService 
         var viewModel = new EditInvoiceViewModel
         {
             Invoice = invoice,
-            Customers = await _customerService.GetAllAsync()
+            Customers = await _getAllCustomers.Execute()
         };
 
         return View(viewModel);
@@ -91,84 +94,27 @@ public class InvoiceController(IInvoiceService invoiceService, ICustomerService 
     {
         if (!ModelState.IsValid)
         {
-            model.Customers = await _customerService.GetAllAsync();
+            model.Customers = await _getAllCustomers.Execute();
 
             return View(model);
         }
 
-        // Todo
-        // - Fix bug: if lines have not been added. Problem in JS.
+        var invoiceLines = GenerateInvoiceLines();
 
-        model.Invoice.InvoiceLines = Request.Form.TryGetValue("InvoiceLinesJson", out var invoiceLinesJson) && !string.IsNullOrWhiteSpace(invoiceLinesJson)
-            ? model.Invoice.InvoiceLines = JsonConvert.DeserializeObject<List<InvoiceLineModel>>(invoiceLinesJson) ?? new List<InvoiceLineModel>()
-            : model.Invoice.InvoiceLines = new List<InvoiceLineModel>();
 
-        model.Invoice.NetPrice = CalculateNetPrice(model.Invoice.InvoiceLines);
-        model.Invoice.TaxPrice = CalculateTaxAmount(model.Invoice.InvoiceLines);
-        model.Invoice.GrossPrice = CalculateGrossPrice(model.Invoice.InvoiceLines);
-
-        await _invoiceService.SaveAsync(model.Invoice);
+        await _editInvoice.Execute(model.Invoice, invoiceLines);
 
         return RedirectToAction("Index");
     }
 
 
 
-
-
-
-    // Todo make a global method somewhere in this project. DDD or in Application Layer?
-    private static decimal CalculateNetPrice(List<InvoiceLineModel>? invoiceLines)
+    private List<InvoiceLineModel> GenerateInvoiceLines()
     {
-        var netPrice = decimal.Zero;
+        var invoiceLinesJson = Request.Form.TryGetValue("InvoiceLinesJson", out var json) ? json.ToString() : string.Empty;
 
-        if (invoiceLines == null || invoiceLines.Count <= 0)
-            return netPrice;
-
-        foreach (var invoiceLine in invoiceLines)
-        {
-            netPrice += invoiceLine.UnitPrice * invoiceLine.Quantity;
-        }
-
-        return netPrice;
+        return string.IsNullOrWhiteSpace(invoiceLinesJson)
+            ? new List<InvoiceLineModel>()
+            : JsonConvert.DeserializeObject<List<InvoiceLineModel>>(invoiceLinesJson) ?? new List<InvoiceLineModel>();
     }
-
-    // Todo make a global method somewhere in this project. DDD or in Application Layer?
-    private static decimal CalculateTaxAmount(List<InvoiceLineModel>? invoiceLines)
-    {
-        var taxAmount = decimal.Zero;
-
-        if (invoiceLines == null || invoiceLines.Count <= 0)
-            return taxAmount;
-
-        foreach (var invoiceLine in invoiceLines)
-        {
-            var netPrice = invoiceLine.UnitPrice * invoiceLine.Quantity;
-
-            taxAmount += (netPrice / 100) * invoiceLine.TaxPercentage;
-        }
-
-        return taxAmount;
-    }
-
-    // Todo make a global method somewhere in this project. DDD or in Application Layer?
-    private static decimal CalculateGrossPrice(List<InvoiceLineModel>? invoiceLines)
-    {
-        var grossPrice = decimal.Zero;
-
-        if (invoiceLines == null || invoiceLines.Count <= 0)
-            return grossPrice;
-
-        foreach (var invoiceLine in invoiceLines)
-        {
-            var netPrice = invoiceLine.UnitPrice * invoiceLine.Quantity;
-
-            var taxAmount = (netPrice / 100) * invoiceLine.TaxPercentage;
-
-            grossPrice += netPrice + taxAmount;
-        }
-
-        return grossPrice;
-    }
-
 }
