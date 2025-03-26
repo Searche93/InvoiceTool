@@ -1,6 +1,7 @@
 ﻿using InvoiceTool.Application.Interfaces;
 using InvoiceTool.Application.Services;
 using InvoiceTool.Application.UseCases.Customers;
+using InvoiceTool.Application.UseCases.InvoiceLines;
 using InvoiceTool.Application.UseCases.Invoices;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,11 +22,16 @@ public static class DependencyInjection
         services.AddScoped<GetCustomerById>();
         services.AddScoped<CreateCustomer>();
         services.AddScoped<EditCustomer>();
-        
+
         services.AddScoped<GetAllInvoices>();
         services.AddScoped<GetInvoiceById>();
         services.AddScoped<CreateInvoice>();
         services.AddScoped<EditInvoice>();
+        services.AddScoped<CalculateInvoice>();
+
+        services.AddScoped<GetInvoiceLinesByInvoiceId>();
+        services.AddScoped<SaveInvoiceLine>();
+        services.AddScoped<DeleteInvoiceLine>();
 
         return services;
     }

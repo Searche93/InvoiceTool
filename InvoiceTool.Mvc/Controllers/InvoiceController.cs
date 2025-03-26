@@ -1,6 +1,6 @@
-﻿using InvoiceTool.Application.Interfaces;
-using InvoiceTool.Application.Models;
+﻿using InvoiceTool.Application.Models;
 using InvoiceTool.Application.UseCases.Customers;
+using InvoiceTool.Application.UseCases.InvoiceLines;
 using InvoiceTool.Application.UseCases.Invoices;
 using InvoiceTool.Mvc.ViewModels.Invoice;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +13,7 @@ public class InvoiceController(
     GetInvoiceById getInvoiceById,
     CreateInvoice createInvoice,
     EditInvoice editInvoice,
+    GetInvoiceLinesByInvoiceId getInvoiceLinesByInvoiceId,
 
     GetAllCustomers getAllCustomers
 ) : Controller
@@ -21,7 +22,8 @@ public class InvoiceController(
     private readonly GetInvoiceById _getInvoiceById = getInvoiceById;
     private readonly CreateInvoice _createInvoice = createInvoice;
     private readonly EditInvoice _editInvoice = editInvoice;
- 
+    private readonly GetInvoiceLinesByInvoiceId _getInvoiceLinesByInvoiceId = getInvoiceLinesByInvoiceId;
+
     private readonly GetAllCustomers _getAllCustomers = getAllCustomers;
 
     public async Task<IActionResult> Index()
@@ -99,8 +101,7 @@ public class InvoiceController(
             return View(model);
         }
 
-        var invoiceLines = GenerateInvoiceLines();
-
+        var invoiceLines = await _getInvoiceLinesByInvoiceId.Execute(model.Invoice.Id);
 
         await _editInvoice.Execute(model.Invoice, invoiceLines);
 
