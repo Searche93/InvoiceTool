@@ -13,6 +13,15 @@ internal class InvoiceRepository(AppDbContext context) : IInvoiceRepository
         return await _context.Invoices.AsNoTracking().Include(i => i.InvoiceLines).FirstOrDefaultAsync(i => i.Id == id);
     }
 
+    // Todo - Fix up this query, might be buggy. 
+    public async Task<Invoice?> GetInvoiceByInvoiceLineIdAsync(int invoiceLineId)
+    {
+        return await _context.Invoices
+            .Include(i => i.InvoiceLines)
+            .Where(i => i.InvoiceLines.Any(il => il.Id == invoiceLineId))
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<List<Invoice>> GetAllAsync()
     {
         var invoices = await _context.Invoices.AsNoTracking().ToListAsync();

@@ -24,6 +24,18 @@ internal class InvoiceService(IInvoiceRepository invoiceRepository) : IInvoiceSe
         return invoiceModel;
     }
 
+    public async Task<InvoiceModel?> GetInvoiceByInvoiceLineIdAsync(int invoiceLineId)
+    {
+        var invoice = await _invoiceRepository.GetInvoiceByInvoiceLineIdAsync(invoiceLineId);
+
+        if (invoice == null) return null;
+
+
+        var invoiceModel = Mapper.Map<InvoiceModel?>(invoice);
+
+        return invoiceModel;
+    }
+
     public async Task<List<InvoiceModel>> GetAllAsync()
     {
         var invoices = await _invoiceRepository.GetAllAsync();

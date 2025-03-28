@@ -28,6 +28,7 @@ public static class DependencyInjection
         services.AddScoped<CreateInvoice>();
         services.AddScoped<EditInvoice>();
         services.AddScoped<CalculateInvoice>();
+        services.AddScoped<GetInvoiceByInvoiceLineIdAsync>();
 
         services.AddScoped<GetInvoiceLinesByInvoiceId>();
         services.AddScoped<SaveInvoiceLine>();

@@ -9,8 +9,14 @@ public interface IInvoiceService
     /// </summary>
     /// <param name="id"></param>
     /// <returns>Invoice model</returns>
-
     Task<InvoiceModel?> GetAsync(int id);
+
+    /// <summary>
+    /// Get the invoice based on the invoiceline using the <paramref name="invoiceLineId"/>
+    /// </summary>
+    /// <param name="invoiceLineId"></param>
+    /// <returns>Invoice entity</returns>
+    Task<InvoiceModel?> GetInvoiceByInvoiceLineIdAsync(int invoiceLineId);
 
     /// <summary>
     /// Get a list of invoices

@@ -129,7 +129,7 @@
         function removeInvoiceLine(id) {
             let url = '@Url.Action("Delete", "InvoiceLine")';
 
-            deleteData(`${url}?id=${id}`, id, getInvoiceLines);
+            deleteData(`${url}?id=${id}`, getInvoiceLines);
         }
     </script>
 }

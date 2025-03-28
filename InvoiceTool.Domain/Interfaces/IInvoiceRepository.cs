@@ -12,6 +12,13 @@ public interface IInvoiceRepository
     Task<Invoice?> GetAsync(int id);
 
     /// <summary>
+    /// Get the invoice based on the invoiceline using the <paramref name="invoiceLineId"/>
+    /// </summary>
+    /// <param name="invoiceLineId"></param>
+    /// <returns>Invoice entity</returns>
+    Task<Invoice?> GetInvoiceByInvoiceLineIdAsync(int invoiceLineId);
+
+    /// <summary>
     /// Get a list of invoices
     /// </summary>
     /// <returns>List of invoice entity</returns>
