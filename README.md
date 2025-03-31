@@ -7,8 +7,9 @@ The first version of this application will exists of just:
 - Entity framework core
 - Unit tests
 
-With the second version I will add 
+With the second version I will add:
 - CQRS 
 - MediatR
 
-For the third version I create the frontend with Angular. The idea is that I'll use the IONIC framework. IONIC is a framework that allows you to create web and mobile applications with Angular.
+For the third version I'll create the frontend with Angular. The idea is that I'll use the IONIC framework. IONIC is a framework that allows you to create web and mobile applications with Angular.
+Read about IONIC here: [a link](https://ionicframework.com/)
