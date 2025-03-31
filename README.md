@@ -12,7 +12,7 @@ With the second version I will add:
 - MediatR
 
 For the third version I'll create the frontend with Angular. The idea is that I'll use the IONIC framework. IONIC is a framework that allows you to create web and mobile applications with Angular.
-Read about IONIC here: <a href="https://ionicframework.com/" target="_blank">IONIC website</a>
+Read about IONIC here: [IONIC website](https://ionicframework.com/)
 
 
 ## Some features I might add
