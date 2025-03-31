@@ -9,6 +9,9 @@ public class CreateCustomer(ICustomerService customerService)
 
     public async Task<CustomerModel?> Execute(CustomerModel customer)
     {
+        if (customer == null)
+            throw new ArgumentNullException(nameof(customer), "Customer cannot be null");
+
         var createdCustomer = await _customerService.SaveAsync(customer);
 
         return createdCustomer;
