@@ -30,16 +30,4 @@ public class EditCustomerTests
 
         await Assert.ThrowsAsync<ArgumentNullException>(() => editCustomerUseCase.Execute(null));
     }
-
-
-    // Todo: Add tests for the following use cases:
-
-    // GetCustomerById
-    // Fail on invalid id
-
-    // GetAllCustomers
-    // Return empty list if no customers
-
-    // DeleteCustomer
-    // Fail on invalid id
 }
