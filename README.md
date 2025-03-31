@@ -18,4 +18,4 @@ Read about IONIC here: <a href="https://ionicframework.com/" target="_blank">ION
 ## Some features I might add
 - Soft delete for invoices and customers
 - StyleCop for code style
-- NetArchTest for architecture tests
+- NetArchTest for architecture tests 
