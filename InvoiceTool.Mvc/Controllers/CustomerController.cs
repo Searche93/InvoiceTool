@@ -1,5 +1,6 @@
 ﻿using InvoiceTool.Application.Models;
 using InvoiceTool.Application.UseCases.Customers;
+using InvoiceTool.Application.UseCases.InvoiceLines;
 using InvoiceTool.Mvc.ViewModels.Customer;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,8 @@ public class CustomerController(
     GetAllCustomers getAllCustomers,
     GetCustomerById getCustomerById,
     CreateCustomer createCustomer,
-    EditCustomer editCustomer
+    EditCustomer editCustomer,
+    DeleteCustomer deleteCustomer
 
 ) : Controller
 {
@@ -18,6 +20,7 @@ public class CustomerController(
     private readonly GetCustomerById _getCustomerById = getCustomerById;
     private readonly CreateCustomer _createCustomer = createCustomer;
     private readonly EditCustomer _editCustomer = editCustomer;
+    private readonly DeleteCustomer _deleteCustomer = deleteCustomer;
 
     public async Task<IActionResult> IndexAsync()
     {
@@ -77,5 +80,12 @@ public class CustomerController(
         }
 
         return View(customer);
+    }
+
+    public async Task<bool> Delete(int id)
+    {
+        var isDeleted = await _deleteCustomer.Execute(id);
+
+        return isDeleted;
     }
 }

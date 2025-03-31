@@ -5,7 +5,7 @@ namespace InvoiceTool.Domain.Interfaces
     public interface ICustomerRepository
     {
         /// <summary>
-        /// Get a single customer by its <paramref name="id"/> id
+        /// Get a single customer by its <paramref name="id"/>
         /// </summary>
         /// <param name="id"></param>
         /// <returns>CustomerModel</returns>
@@ -23,5 +23,12 @@ namespace InvoiceTool.Domain.Interfaces
         /// <param name="customer"></param>
         /// <returns>Updated entity</returns>
         Task<Customer> SaveAsync(Customer customer);
+
+        /// <summary>
+        /// Delete a customer by its <paramref name="customerId"/>
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns>True if deleted succesfull</returns>
+        Task<bool> DeleteAsync(int customerId);
     }
 }

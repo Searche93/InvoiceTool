@@ -58,4 +58,9 @@ internal class InvoiceService(IInvoiceRepository invoiceRepository) : IInvoiceSe
 
         return savedInvoiceModel;
     }
+
+    public async Task<bool> DeleteAsync(int invoiceId)
+    {
+        return await _invoiceRepository.DeleteAsync(invoiceId);
+    }
 }

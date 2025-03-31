@@ -56,4 +56,19 @@ internal class InvoiceRepository(AppDbContext context) : IInvoiceRepository
 
         return existingInvoice;
     }
+
+    public async Task<bool> DeleteAsync(int invoiceId)
+    {
+        var invoice = await _context.Invoices.FindAsync(invoiceId);
+
+        if (invoice == null)
+            return false;
+
+
+        _context.Invoices.Remove(invoice);
+
+        var numberOfDeletedRecords = await _context.SaveChangesAsync();
+
+        return numberOfDeletedRecords > 0;
+    }
 }

@@ -23,4 +23,11 @@ public interface ICustomerService
     /// <param name="customerModel"></param>
     /// <returns><paramref name="customerModel"/></returns>
     Task<CustomerModel> SaveAsync(CustomerModel customerModel);
+
+    /// <summary>
+    /// Delete a customer by its <paramref name="customerId"/>
+    /// </summary>
+    /// <param name="customerId"></param>
+    /// <returns>True if deleted succesfull</returns>
+    Task<bool> DeleteAsync(int customerId);
 }

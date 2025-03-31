@@ -30,4 +30,11 @@ public interface IInvoiceService
     /// <param name="invoiceModel"></param>
     /// <returns><paramref name="invoiceModel"/></returns>
     Task<InvoiceModel> SaveAsync(InvoiceModel invoiceModel);
+
+    /// <summary>
+    /// Delete an invoice by it <paramref name="invoiceId"/>
+    /// </summary>
+    /// <param name="invoiceId"></param>
+    /// <returns>True if deleted succesfully</returns>
+    Task<bool> DeleteAsync(int invoiceId);
 }

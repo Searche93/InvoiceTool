@@ -42,4 +42,19 @@ internal class CustomerRepository(AppDbContext context) : ICustomerRepository
 
         return customer;
     }
+
+    public async Task<bool> DeleteAsync(int customerId)
+    {
+        var customer = await _context.Customers.FindAsync(customerId);
+
+        if (customer == null)
+            return false;
+
+
+        _context.Customers.Remove(customer);
+
+        var numberOfDeletedRecords = await _context.SaveChangesAsync();
+
+        return numberOfDeletedRecords > 0;
+    }
 }

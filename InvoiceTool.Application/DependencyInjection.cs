@@ -22,6 +22,7 @@ public static class DependencyInjection
         services.AddScoped<GetCustomerById>();
         services.AddScoped<CreateCustomer>();
         services.AddScoped<EditCustomer>();
+        services.AddScoped<DeleteCustomer>();
 
         services.AddScoped<GetAllInvoices>();
         services.AddScoped<GetInvoiceById>();
@@ -29,6 +30,7 @@ public static class DependencyInjection
         services.AddScoped<EditInvoice>();
         services.AddScoped<CalculateInvoice>();
         services.AddScoped<GetInvoiceByInvoiceLineIdAsync>();
+        services.AddScoped<DeleteInvoice>();
 
         services.AddScoped<GetInvoiceLinesByInvoiceId>();
         services.AddScoped<SaveInvoiceLine>();

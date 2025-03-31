@@ -24,6 +24,7 @@
                 <th>Expiration date</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
 
             @foreach(InvoiceModel invoice in Model.Invoices)
@@ -42,6 +43,11 @@
                             Edit
                         </a>
                     </td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteInvoice(@invoice.Id)">
+                            Delete
+                        </button>
+                    </td>
                 </tr>
             }
         </table>
@@ -51,3 +57,14 @@
         <p>No invoices found</p>
     }
 </div>
+
+
+@section Scripts {
+    <script>
+        function deleteInvoice(id) {
+            let url = '@Url.Action("Delete", "Invoice")';
+
+            deleteData(`${url}?id=${id}`, reloadPage);
+        }
+    </script>
+}

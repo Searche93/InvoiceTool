@@ -14,6 +14,7 @@ public class InvoiceController(
     CreateInvoice createInvoice,
     EditInvoice editInvoice,
     GetInvoiceLinesByInvoiceId getInvoiceLinesByInvoiceId,
+    DeleteInvoice deleteInvoice,
 
     GetAllCustomers getAllCustomers
 ) : Controller
@@ -23,6 +24,7 @@ public class InvoiceController(
     private readonly CreateInvoice _createInvoice = createInvoice;
     private readonly EditInvoice _editInvoice = editInvoice;
     private readonly GetInvoiceLinesByInvoiceId _getInvoiceLinesByInvoiceId = getInvoiceLinesByInvoiceId;
+    private readonly DeleteInvoice _deleteInvoice = deleteInvoice;
 
     private readonly GetAllCustomers _getAllCustomers = getAllCustomers;
 
@@ -108,6 +110,12 @@ public class InvoiceController(
         return RedirectToAction("Index");
     }
 
+    public async Task<bool> Delete(int id)
+    {
+        var isDeleted = await _deleteInvoice.Execute(id);
+
+        return isDeleted;
+    }
 
 
     private List<InvoiceLineModel> GenerateInvoiceLines()

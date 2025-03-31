@@ -26,6 +26,7 @@
                 <th>Address</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
 
             @foreach(CustomerModel customer in Model.Customers)
@@ -46,6 +47,11 @@
                             Edit
                         </a>
                     </td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteCustomer(@customer.Id)">
+                            Delete
+                        </button>
+                    </td>
                 </tr>
             }
         </table>
@@ -55,3 +61,13 @@
         <p>No customers found</p>
     }
 </div>
+
+@section Scripts {
+    <script>
+        function deleteCustomer(id) {
+            let url = '@Url.Action("Delete", "Customer")';
+
+            deleteData(`${url}?id=${id}`, reloadPage);
+        }
+    </script>
+}

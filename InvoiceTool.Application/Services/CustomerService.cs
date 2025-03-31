@@ -46,4 +46,9 @@ internal class CustomerService(ICustomerRepository customerRepository) : ICustom
 
         return savedCustomerModel;
     }
+
+    public async Task<bool> DeleteAsync(int customerId)
+    {
+        return await _customerRepository.DeleteAsync(customerId);
+    }
 }

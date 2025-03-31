@@ -46,3 +46,7 @@ function deleteData(url, callback) {
     })
     .catch(error => console.error(`Error deleting in ${url}:`, error));
 }
+
+function reloadPage() {
+    location.reload();
+}
