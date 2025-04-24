@@ -8,6 +8,9 @@ public class DeleteCustomer(ICustomerService customerService)
 
     public async Task<bool> Execute(int id)
     {
+        if (id <= 0)
+            throw new ArgumentException("Id cannot be zero or under.");
+
         var isDeleted = await _customerService.DeleteAsync(id);
 
         return isDeleted;
