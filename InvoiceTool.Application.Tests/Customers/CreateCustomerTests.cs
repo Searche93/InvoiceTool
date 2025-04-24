@@ -10,7 +10,8 @@ public class CreateCustomerTests
     [Fact]
     public async Task Handle_ValidCustomer_CreatesCustomerSuccesfully()
     {
-        // test
+        // Testing git push 
+
         var customerServiceMock = new Mock<ICustomerService>();
 
         var createCustomerUseCase = new CreateCustomer(customerServiceMock.Object);
