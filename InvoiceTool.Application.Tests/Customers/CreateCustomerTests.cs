@@ -10,7 +10,7 @@ public class CreateCustomerTests
     [Fact]
     public async Task Handle_ValidCustomer_CreatesCustomerSuccesfully()
     {
-        // test 
+        // test
         var customerServiceMock = new Mock<ICustomerService>();
 
         var createCustomerUseCase = new CreateCustomer(customerServiceMock.Object);
