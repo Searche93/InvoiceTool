@@ -8,7 +8,7 @@ namespace InvoiceTool.Application.Tests.Customers;
 public class DeleteCustomerTests
 {
     [Fact]
-    public async Task DeleteCustomer_Handle_CustomerCreatedSuccessfull()
+    public async Task DeleteCustomer_Handle_CustomerDeletedSuccessfull()
     {
         // Arrange
         var mockedService = new Mock<ICustomerService>();
@@ -28,7 +28,7 @@ public class DeleteCustomerTests
 
 
     [Fact]
-    public async Task DeleteCustomer_Handle_CustomerCreatedUnSuccessfull()
+    public async Task DeleteCustomer_Handle_CustomerDeletedUnSuccessfull()
     {
         // Arrange
         var mockedService = new Mock<ICustomerService>();
