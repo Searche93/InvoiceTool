@@ -1,9 +1,48 @@
-﻿namespace InvoiceTool.Application.Tests.Customers;
+﻿using FluentAssertions;
+using InvoiceTool.Application.Interfaces;
+using InvoiceTool.Application.Models;
+using InvoiceTool.Application.UseCases.Customers;
+using Moq;
+
+namespace InvoiceTool.Application.Tests.Customers;
 
 public class GetCustomerByIdTests
 {
-    // Todo: Add tests for the following use cases:
+    [Fact]
+    public async Task GetCustomerById_Handle_ReturnsOneCustomer()
+    {
+        // Arrange
+        var mockedService = new Mock<ICustomerService>();
 
-    // GetCustomerById
-    // Fail on invalid id
+        var expectedResult = new CustomerModel
+        {
+            Name = "Serge",
+            CompanyName = "Searche"
+        };
+
+        mockedService.Setup(s => s.GetAsync(1)).ReturnsAsync(expectedResult);
+
+        var useCase = new GetCustomerById(mockedService.Object);
+
+        // Act
+        var result = await useCase.Execute(1);
+
+        // Assert
+        result.Should().BeEquivalentTo(expectedResult);
+    }
+
+    [Fact]
+    public async Task GetCustomerById_Handle_ArgumentException()
+    {
+        // Arrange
+        var mockedService = new Mock<ICustomerService>();
+
+        var useCase = new GetCustomerById(mockedService.Object);
+
+        // Act
+        var result = async () => await useCase.Execute(0);
+
+        // Assert
+        await result.Should().ThrowAsync<ArgumentException>();
+    }
 }

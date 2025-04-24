@@ -1,4 +1,5 @@
-﻿using InvoiceTool.Application.Interfaces;
+﻿using FluentAssertions;
+using InvoiceTool.Application.Interfaces;
 using InvoiceTool.Application.Models;
 using InvoiceTool.Application.UseCases.Customers;
 using Moq;
@@ -8,28 +9,45 @@ namespace InvoiceTool.Application.Tests.Customers;
 public class CreateCustomerTests
 {
     [Fact]
-    public async Task Handle_ValidCustomer_CreatesCustomerSuccesfully()
+    public async Task CreateCustomer_Handle_ReturnsNewCustomer()
     {
-        // Testing git push 
+        // Arrange
+        var mockedService = new Mock<ICustomerService>();
 
-        var customerServiceMock = new Mock<ICustomerService>();
+        mockedService
+            .Setup(s => s.SaveAsync(It.IsAny<CustomerModel>()))
+            .ReturnsAsync((CustomerModel input) => input);
 
-        var createCustomerUseCase = new CreateCustomer(customerServiceMock.Object);
+        var useCase = new CreateCustomer(mockedService.Object);
 
-        var customer = new CustomerModel { Id = 1, Name = "Serge Zant" };
+        var customer = new CustomerModel()
+        {
+            Name = "Serge",
+            CompanyName = "Searche",
+            Address = "AdresTest 12",
+            PostalCode = "1234 AB",
+            City = "New York",
+        };
 
-        await createCustomerUseCase.Execute(customer);
+        // Act
+        var result = await useCase.Execute(customer);
 
-        customerServiceMock.Verify(x => x.SaveAsync(customer), Times.Once);
+        // Assert
+        result.Should().BeEquivalentTo(customer);
     }
 
     [Fact]
-    public async Task Handle_CreateCustomerNull_ThrowsNullException()
+    public async Task CreateCustomer_Handle_ArgumentNullException()
     {
-        var customerServiceMock = new Mock<ICustomerService>();
+        // Arrange
+        var mockedService = new Mock<ICustomerService>();
 
-        var createCustomerUseCase = new CreateCustomer(customerServiceMock.Object);
+        var useCase = new CreateCustomer(mockedService.Object);
 
-        await Assert.ThrowsAsync<ArgumentNullException>(() => createCustomerUseCase.Execute(null));
+        // Act
+        var result = async () => await useCase.Execute(null!);
+
+        // Assert
+        await result.Should().ThrowAsync<ArgumentNullException>();
     }
 }

@@ -9,6 +9,9 @@ public class GetCustomerById(ICustomerService customerService)
 
     public async Task<CustomerModel?> Execute(int id)
     {
+        if (id <= 0)
+            throw new ArgumentException("Id cannot be zero or under.");
+
         var customer = await _customerService.GetAsync(id);
 
         return customer;
