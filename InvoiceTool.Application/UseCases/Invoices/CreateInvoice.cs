@@ -8,10 +8,12 @@ public class CreateInvoice(IInvoiceService invoiceService, CalculateInvoice calc
     private readonly IInvoiceService _invoiceService = invoiceService;
     private readonly CalculateInvoice _calculateInvoice = calculateInvoice;
 
-    public async Task Execute(InvoiceModel invoice, List<InvoiceLineModel> invoiceLines)
+    public async Task<InvoiceModel> Execute(InvoiceModel invoice, List<InvoiceLineModel> invoiceLines)
     {
         invoice = _calculateInvoice.Execute(invoice, invoiceLines);
 
-        await _invoiceService.SaveAsync(invoice);
+        var createdInvoice = await _invoiceService.SaveAsync(invoice);
+
+        return createdInvoice;
     }
 }

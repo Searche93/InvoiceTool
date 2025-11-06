@@ -1,4 +1,5 @@
-﻿using InvoiceTool.Application.Interfaces;
+﻿using FluentAssertions;
+using InvoiceTool.Application.Interfaces;
 using InvoiceTool.Application.Models;
 using InvoiceTool.Application.UseCases.Customers;
 using Moq;
@@ -10,24 +11,43 @@ public class EditCustomerTests
     [Fact]
     public async Task Handle_ValidCustomer_EditCustomerSuccesfully()
     {
-        var customerServiceMock = new Mock<ICustomerService>();
+        // Arrange
+        var mockedService = new Mock<ICustomerService>();
 
-        var editCustomerUseCase = new EditCustomer(customerServiceMock.Object);
+        mockedService
+            .Setup(s => s.SaveAsync(It.IsAny<CustomerModel>()))
+            .ReturnsAsync((CustomerModel input) => input);
 
-        var customer = new CustomerModel { Id = 1, Name = "Serge Zant" };
+        var useCase = new CreateCustomer(mockedService.Object);
 
-        await editCustomerUseCase.Execute(customer);
+        var customer = new CustomerModel()
+        {
+            Name = "Serge",
+            CompanyName = "Searche",
+            Address = "Changed Adres 5",
+            PostalCode = "6789 XY",
+            City = "London",
+        };
 
-        customerServiceMock.Verify(x => x.SaveAsync(customer), Times.Once);
+        // Act
+        var result = await useCase.Execute(customer);
+
+        // Assert
+        result.Should().BeEquivalentTo(customer);
     }
 
     [Fact]
     public async Task Handle_EditCustomerNull_ThrowsNullException()
     {
-        var customerServiceMock = new Mock<ICustomerService>();
+        // Arrange
+        var mockedService = new Mock<ICustomerService>();
 
-        var editCustomerUseCase = new EditCustomer(customerServiceMock.Object);
+        var useCase = new CreateCustomer(mockedService.Object);
 
-        await Assert.ThrowsAsync<ArgumentNullException>(() => editCustomerUseCase.Execute(null));
+        // Act
+        var result = async () => await useCase.Execute(null!);
+
+        // Assert
+        await result.Should().ThrowAsync<ArgumentNullException>();
     }
 }

@@ -1,4 +1,5 @@
-﻿using InvoiceTool.Application.Interfaces;
+﻿using FluentAssertions;
+using InvoiceTool.Application.Interfaces;
 using InvoiceTool.Application.Models;
 using InvoiceTool.Application.UseCases.Customers;
 using Moq;
@@ -8,26 +9,40 @@ namespace InvoiceTool.Application.Tests.Customers;
 public class GetCustomerByIdTests
 {
     [Fact]
-    public async Task Handle_ValidCustomer_GetCustomerSuccesfully()
+    public async Task GetCustomerById_Handle_ReturnsOneCustomer()
     {
-        var customerServiceMock = new Mock<ICustomerService>();
+        // Arrange
+        var mockedService = new Mock<ICustomerService>();
 
-        var getCustomerByIdUseCase = new GetCustomerById(customerServiceMock.Object);
+        var expectedResult = new CustomerModel
+        {
+            Name = "Serge",
+            CompanyName = "Searche"
+        };
 
-        await getCustomerByIdUseCase.Execute(1);
+        mockedService.Setup(s => s.GetAsync(1)).ReturnsAsync(expectedResult);
 
-        customerServiceMock.Verify(x => x.GetAsync(1), Times.Once);
+        var useCase = new GetCustomerById(mockedService.Object);
+
+        // Act
+        var result = await useCase.Execute(1);
+
+        // Assert
+        result.Should().BeEquivalentTo(expectedResult);
     }
 
     [Fact]
-    public async Task Handle_InValidCustomer_GetCustomerUnSuccesfull()
+    public async Task GetCustomerById_Handle_ArgumentException()
     {
-        var customerServiceMock = new Mock<ICustomerService>();
+        // Arrange
+        var mockedService = new Mock<ICustomerService>();
 
-        var getCustomerByIdUseCase = new GetCustomerById(customerServiceMock.Object);
+        var useCase = new GetCustomerById(mockedService.Object);
 
-        var result = await getCustomerByIdUseCase.Execute(-1);
+        // Act
+        var result = async () => await useCase.Execute(0);
 
-        //await Assert.True(result is null);
+        // Assert
+        await result.Should().ThrowAsync<ArgumentException>();
     }
 }
