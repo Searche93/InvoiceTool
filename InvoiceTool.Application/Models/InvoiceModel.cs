@@ -14,6 +14,6 @@ public class InvoiceModel
     public decimal TaxPrice { get; set; }
     public decimal GrossPrice { get; set; }
 
-    public int? CustomerId { get; set; }
+    public int CustomerId { get; set; }
     public List<InvoiceLineModel>? InvoiceLines { get; set; }
 }

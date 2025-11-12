@@ -2,6 +2,7 @@
 using InvoiceTool.Application.UseCases.Customers;
 using InvoiceTool.Application.UseCases.InvoiceLines;
 using InvoiceTool.Application.UseCases.Invoices;
+using InvoiceTool.Mvc.Helpers;
 using InvoiceTool.Mvc.ViewModels.Invoice;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -15,10 +16,17 @@ public class InvoiceController(
     EditInvoice editInvoice,
     GetInvoiceLinesByInvoiceId getInvoiceLinesByInvoiceId,
     DeleteInvoice deleteInvoice,
+    CreatePdfByteArray createPdfByteArray,
 
-    GetAllCustomers getAllCustomers
+    GetAllCustomers getAllCustomers,
+    GetCustomerById getCustomerById,
+    IRazorViewToStringRenderer razorViewToStringRenderer,
+    IWebHostEnvironment env
 ) : Controller
 {
+    private readonly IRazorViewToStringRenderer _razorViewToStringRenderer = razorViewToStringRenderer;
+    private readonly IWebHostEnvironment _env = env;
+
     private readonly GetAllInvoices _getAllInvoices = getAllInvoices;
     private readonly GetInvoiceById _getInvoiceById = getInvoiceById;
     private readonly CreateInvoice _createInvoice = createInvoice;
@@ -26,7 +34,10 @@ public class InvoiceController(
     private readonly GetInvoiceLinesByInvoiceId _getInvoiceLinesByInvoiceId = getInvoiceLinesByInvoiceId;
     private readonly DeleteInvoice _deleteInvoice = deleteInvoice;
 
+    private readonly CreatePdfByteArray _createPdfByteArray = createPdfByteArray;
+
     private readonly GetAllCustomers _getAllCustomers = getAllCustomers;
+    private readonly GetCustomerById _getCustomerById = getCustomerById;
 
     public async Task<IActionResult> Index()
     {
@@ -115,6 +126,39 @@ public class InvoiceController(
         var isDeleted = await _deleteInvoice.Execute(id);
 
         return isDeleted;
+    }
+
+    // Todo => Cleanup this method
+    [HttpGet("DownloadPdf/{id}")]
+    public async Task<FileResult> DownloadPdf(int id)
+    {
+#if HAS_DOCUMENTTOOLS
+
+        if (id <= 0) throw new Exception("Invalid invoice id.");
+
+        var invoice = await _getInvoiceById.Execute(id) ?? throw new Exception("Invoice not found.");
+
+        var customer = await _getCustomerById.Execute(invoice.CustomerId) ?? throw new Exception("Customer not found.");
+
+        var downloadPdfViewModel = new DownloadPdfViewModel
+        {
+            Invoice = invoice,
+            Customer = customer,
+        };
+
+        var html = await _razorViewToStringRenderer.RenderViewToStringAsync(this, "DownloadPdf", downloadPdfViewModel);
+
+        var bytes = _createPdfByteArray.Execute(html);
+
+        return File(bytes, "application/pdf", $"invoice-{invoice.Number}.pdf");
+
+#else
+        var message = "PDF generation is only available for users with acces to the DocumentTools package.";
+        
+        var fallbackBytes = System.Text.Encoding.UTF8.GetBytes($"<html><body><h1>{message}</h1></body></html>");
+            
+        return File(fallbackBytes, "text/html", "not-available.html");
+#endif
     }
 
 

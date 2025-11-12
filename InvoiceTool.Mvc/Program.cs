@@ -1,6 +1,7 @@
 using InvoiceTool.Application;
 using InvoiceTool.Domain;
 using InvoiceTool.Infrastructure;
+using InvoiceTool.Mvc.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,11 +14,12 @@ builder.Configuration.AddEnvironmentVariables();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddScoped<IRazorViewToStringRenderer, RazorViewToStringRenderer>();
+
 builder.Services
     .AddDomain()
     .AddApplication()
     .AddInfrastructure(builder.Configuration);
-
 
 var app = builder.Build();
 

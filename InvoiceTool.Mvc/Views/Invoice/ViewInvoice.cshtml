@@ -4,9 +4,18 @@
 
 @model ViewInvoiceViewModel
 
-@if(Model.Invoice != null)
+@if (Model.Invoice != null)
 {
-    <h2>Invoice</h2>
+    <div class="row mb-4">
+        <div class="col-6">
+            <h2>Invoice</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-action="DownloadPdf" asp-controller="Invoice" asp-route-id="@Model.Invoice.Id" class="btn btn-primary">
+                Download Factuur
+            </a>
+        </div>
+    </div>
 
     <table class="table">
         <tr>
@@ -53,7 +62,7 @@
                 <th>Netprice</th>
             </tr>
 
-            @foreach(InvoiceLineModel invoiceLine in Model.Invoice.InvoiceLines)
+            @foreach (InvoiceLineModel invoiceLine in Model.Invoice.InvoiceLines)
             {
                 <tr>
                     <td>@invoiceLine.Description</td>

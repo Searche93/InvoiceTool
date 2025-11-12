@@ -1,0 +1,125 @@
+﻿@using InvoiceTool.Application.Models
+@using InvoiceTool.Mvc.ViewModels
+@using InvoiceTool.Mvc.ViewModels.Invoice
+
+@model DownloadPdfViewModel
+
+@if (Model != null)
+{
+    <style>
+        .row {width: 100%;}
+
+        .row::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .col-3, .col-4, col-6, .col-8, .col-9 {
+            box-sizing: border-box;
+            float: left;
+        }
+
+        .col-3 {width: 25%;}
+        .col-4 {width: 33.33%;}
+        .col-6 {width: 50%;}
+        .col-8 {width: 66.66%;}
+        .col-9 {width: 75%;}
+    </style>
+
+    <div class="row">
+        <div class="col-6">
+            [LOGO]
+        </div>
+
+        <div class="col-6">
+            <p>
+                <strong>Searche</strong><br />
+                Kreek 81<br />
+                8212XD Lelystad
+            </p>
+
+            <p>
+                KVK: 85704016
+                BTW: NL93 KNAB 0416 5751 10
+                Bank: NL004134356B69
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <p>
+                <strong>@Model.Customer.Name</strong><br />
+                @Model.Customer.Address <br />
+                @Model.Customer.PostalCode / @Model.Customer.City
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <h2>Factuur</h2>
+            <p>
+                <strong>Factuurnummer:</strong> @Model.Invoice.Number<br />
+                <strong>Factuurdatum:</strong> @Model.Invoice.DateValue<br />
+                <strong>Vervaldatum:</strong> @Model.Invoice.ExpirationDateValue
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        @if (Model.Invoice.InvoiceLines != null && Model.Invoice.InvoiceLines.Count > 0)
+        {
+            <div class="col-9"><strong>Omschrijving</strong></div>
+            <div class="col-3"><strong>Bedrag</strong></div>
+
+            @foreach (InvoiceLineModel invoiceLine in Model.Invoice.InvoiceLines)
+            {
+                <div class="col-9">
+                    @invoiceLine.Description
+                </div>
+                <div class="col-3">
+                    @invoiceLine.NetPrice
+                </div>
+            }
+        }
+    </div>
+
+    <div class="row">
+        <div class="col-8"></div>
+
+        <div class="col-4">
+            <table>
+                <tr>
+                    <td>Subtotaal</td>
+                    <td>@Model.Invoice.GrossPrice</td>
+                </tr>
+                <tr>
+                    <td>BTW</td>
+                    <td>@Model.Invoice.TaxPrice</td>
+                </tr>
+                <tr>
+                    <td>Totaal incl. BTW</td>
+                    <td>@Model.Invoice.NetPrice</td>
+                </tr>
+
+                <tr class="to-pay">
+                    <td>Te betalen</td>
+                    <td>@Model.Invoice.NetPrice</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 text-center">
+            Wij verzoeken u vriendelijk om de betaling binnen 14 dagen te voldoen op rekening NL93 KNAB 0416 5751 10 onder
+            vermelding van het factuurnummer. Vragen over de factuur schriftelijk binnen 14 dagen.
+        </div>
+    </div>
+}
+else
+{
+    <p>Error. No invoice found.</p>   
+}
