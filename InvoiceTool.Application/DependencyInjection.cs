@@ -3,6 +3,7 @@ using InvoiceTool.Application.Services;
 using InvoiceTool.Application.UseCases.Customers;
 using InvoiceTool.Application.UseCases.InvoiceLines;
 using InvoiceTool.Application.UseCases.Invoices;
+using InvoiceTool.Application.UseCases.Settings;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace InvoiceTool.Application;
@@ -16,6 +17,7 @@ public static class DependencyInjection
         services.AddScoped<IInvoiceService, InvoiceService>();
         services.AddScoped<IInvoiceLineService, InvoiceLineService>();
         services.AddScoped<ICustomerService, CustomerService>();
+        services.AddScoped<ISettingsService, SettingsService>();
         
         // UseCases
         services.AddScoped<GetAllCustomers>();
@@ -31,6 +33,9 @@ public static class DependencyInjection
         services.AddScoped<CalculateInvoice>();
         services.AddScoped<GetInvoiceByInvoiceLineIdAsync>();
         services.AddScoped<DeleteInvoice>();
+        
+        services.AddScoped<GetSettings>();
+        services.AddScoped<SaveSettings>();
         
         services.AddScoped<CreatePdfByteArray>();
 

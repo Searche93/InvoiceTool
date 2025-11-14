@@ -1,0 +1,99 @@
+﻿@using InvoiceTool.Mvc.ViewModels.Settings
+
+@model EditSettingsViewModel
+
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+
+<h2>Edit Settings</h2>
+
+
+<form asp-action="Edit" asp-controller="Settings" method="post">
+    <input type="hidden" asp-for="Settings.Id" />
+
+    <div class="form-group">
+        <label asp-for="Settings.CompanyName" class="control-label"></label>
+        <input asp-for="Settings.CompanyName" class="form-control" />
+        <span asp-validation-for="Settings.CompanyName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Settings.CompanyEmail" class="control-label"></label>
+        <input asp-for="Settings.CompanyEmail" class="form-control" />
+        <span asp-validation-for="Settings.CompanyEmail" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Settings.CompanyAddress" class="control-label"></label>
+        <input asp-for="Settings.CompanyAddress" class="form-control" />
+        <span asp-validation-for="Settings.CompanyAddress" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Settings.CompanyPostalCode" class="control-label"></label>
+        <input asp-for="Settings.CompanyPostalCode" class="form-control" />
+        <span asp-validation-for="Settings.CompanyPostalCode" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Settings.CompanyCity" class="control-label"></label>
+        <input asp-for="Settings.CompanyCity" class="form-control" />
+        <span asp-validation-for="Settings.CompanyCity" class="text-danger"></span>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="Settings.CompanyPhoneNumber" class="control-label"></label>
+        <input asp-for="Settings.CompanyPhoneNumber" class="form-control" />
+        <span asp-validation-for="Settings.CompanyPhoneNumber" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Settings.CompanyWebsite" class="control-label"></label>
+        <input asp-for="Settings.CompanyWebsite" class="form-control" />
+        <span asp-validation-for="Settings.CompanyWebsite" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Settings.CompanyCocNumber" class="control-label"></label>
+        <input asp-for="Settings.CompanyCocNumber" class="form-control" />
+        <span asp-validation-for="Settings.CompanyCocNumber" class="text-danger"></span>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="Settings.CompanyVatNumber" class="control-label"></label>
+        <input asp-for="Settings.CompanyVatNumber" class="form-control" />
+        <span asp-validation-for="Settings.CompanyVatNumber" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Settings.CompanyIban" class="control-label"></label>
+        <input asp-for="Settings.CompanyIban" class="form-control" />
+        <span asp-validation-for="Settings.CompanyIban" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Settings.CompanyLogo" class="control-label"></label>
+        <input asp-for="Settings.CompanyLogo" class="form-control" />
+        <span asp-validation-for="Settings.CompanyLogo" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Settings.InvoiceBottomContent" class="control-label"></label>
+        <input asp-for="Settings.InvoiceBottomContent" class="form-control" />
+        <span asp-validation-for="Settings.InvoiceBottomContent" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

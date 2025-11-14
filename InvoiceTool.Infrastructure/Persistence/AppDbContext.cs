@@ -9,6 +9,7 @@ public class AppDbContext : DbContext
     public DbSet<Invoice> Invoices { get; set; }
     public DbSet<InvoiceLine> InvoiceLines { get; set; }
     public DbSet<Customer> Customers { get; set; }
+    public DbSet<Settings> Settings { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -17,5 +18,6 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new InvoiceConfiguration());
         modelBuilder.ApplyConfiguration(new InvoiceLineConfiguration());
         modelBuilder.ApplyConfiguration(new CustomerConfiguration());
+        modelBuilder.ApplyConfiguration(new SettingsConfiguration());
     }
 }

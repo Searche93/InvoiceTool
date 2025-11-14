@@ -21,6 +21,9 @@ namespace InvoiceTool.Application.Mapper
 
                 c.CreateMap<Customer, CustomerModel>();
                 c.CreateMap<CustomerModel, Customer>();
+                
+                c.CreateMap<Settings, SettingsModel>();
+                c.CreateMap<SettingsModel, Settings>();
             });
 
             return new AutoMapper.Mapper(config);

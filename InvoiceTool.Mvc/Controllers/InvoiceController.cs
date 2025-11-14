@@ -20,12 +20,10 @@ public class InvoiceController(
 
     GetAllCustomers getAllCustomers,
     GetCustomerById getCustomerById,
-    IRazorViewToStringRenderer razorViewToStringRenderer,
-    IWebHostEnvironment env
+    IRazorViewToStringRenderer razorViewToStringRenderer
 ) : Controller
 {
     private readonly IRazorViewToStringRenderer _razorViewToStringRenderer = razorViewToStringRenderer;
-    private readonly IWebHostEnvironment _env = env;
 
     private readonly GetAllInvoices _getAllInvoices = getAllInvoices;
     private readonly GetInvoiceById _getInvoiceById = getInvoiceById;
