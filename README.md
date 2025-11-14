@@ -19,3 +19,11 @@ Read about IONIC here: [IONIC website](https://ionicframework.com/)
 - Soft delete for invoices and customers
 - StyleCop for code style
 - NetArchTest for architecture tests 
+
+
+## Overkill?
+- Yes, I do know that this is overkill for a simple invoice tool. But the idea is to expirement with these technologies and patterns
+
+
+## Custom DocumentTools
+- I have used a custom DocumentTools package, just a small package that allows me to create PDF files based of an HTML template. This package is stored in my private github account and not (yet) available to the public. Sorry :(
