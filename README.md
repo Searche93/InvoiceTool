@@ -22,8 +22,8 @@ Read about IONIC here: [IONIC website](https://ionicframework.com/)
 
 
 ## Overkill?
-- Yes, I do know that this is overkill for a simple invoice tool. But the idea is to expirement with these technologies and patterns
+- Yes, I do know that this is overkill for a simple invoice tool. But the idea is to expirement with technologies, patterns and architectures.
 
 
 ## Custom DocumentTools
-- I have used a custom DocumentTools package, just a small package that allows me to create PDF files based of an HTML template. This package is stored in my private github account and not (yet) available to the public. Sorry :(
+- I have used a custom DocumentTools package, just a small package that allows me to create PDF files based on an HTML template. This package is stored in my private github account and not (yet) available to the public. Sorry :(
