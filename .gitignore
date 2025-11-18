@@ -16,6 +16,9 @@ appsettings.Development.json
 # EfCoreCommands.txt
 EfCoreCommands.txt
 
+# Ignore all images
+wwwroot/images/
+
 
 
 # User-specific files (MonoDevelop/Xamarin Studio)

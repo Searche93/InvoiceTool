@@ -2,6 +2,7 @@
 using InvoiceTool.Application.UseCases.Customers;
 using InvoiceTool.Application.UseCases.InvoiceLines;
 using InvoiceTool.Application.UseCases.Invoices;
+using InvoiceTool.Application.UseCases.Settings;
 using InvoiceTool.Mvc.Helpers;
 using InvoiceTool.Mvc.ViewModels.Invoice;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,7 @@ public class InvoiceController(
 
     GetAllCustomers getAllCustomers,
     GetCustomerById getCustomerById,
+    GetSettings getSettings,
     IRazorViewToStringRenderer razorViewToStringRenderer
 ) : Controller
 {
@@ -36,6 +38,7 @@ public class InvoiceController(
 
     private readonly GetAllCustomers _getAllCustomers = getAllCustomers;
     private readonly GetCustomerById _getCustomerById = getCustomerById;
+    private readonly GetSettings _getSettings = getSettings;
 
     public async Task<IActionResult> Index()
     {
@@ -142,6 +145,7 @@ public class InvoiceController(
         {
             Invoice = invoice,
             Customer = customer,
+            Settings = await _getSettings.Execute() ?? new SettingsModel(),
         };
 
         var html = await _razorViewToStringRenderer.RenderViewToStringAsync(this, "DownloadPdf", downloadPdfViewModel);

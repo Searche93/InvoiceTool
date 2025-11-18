@@ -1,4 +1,5 @@
-﻿using DocumentTools.Pdf;
+﻿using DinkToPdf;
+using DocumentTools.Pdf;
 using InvoiceTool.Application.Interfaces;
 
 namespace InvoiceTool.Infrastructure.Files;
@@ -12,6 +13,8 @@ public class PdfGenerator : IPdfGenerator
         {
             pdfOptions.UserStyleSheet = cssPath;
         }
+
+        pdfOptions.Margins = new MarginSettings{ Top = 15, Bottom = 15 };
 
         var pdf = new Pdf(pdfOptions);
 
