@@ -2,11 +2,16 @@
 using InvoiceTool.Application.Models;
 namespace InvoiceTool.Application.UseCases.Customers;
 
-public class EditCustomer(ICustomerService customerService)
+public interface IEditCustomer
+{
+    Task<CustomerModel?> ExecuteAsync(CustomerModel customer);
+}
+
+public class EditCustomer(ICustomerService customerService) : IEditCustomer
 {
     private readonly ICustomerService _customerService = customerService;
 
-    public async Task<CustomerModel?> Execute(CustomerModel customer)
+    public async Task<CustomerModel?> ExecuteAsync(CustomerModel customer)
     {
         if (customer == null)
             throw new ArgumentNullException(nameof(customer), "Customer cannot be null");

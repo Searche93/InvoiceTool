@@ -3,11 +3,16 @@ using InvoiceTool.Application.Models;
 
 namespace InvoiceTool.Application.UseCases.Customers;
 
-public class GetCustomerById(ICustomerService customerService)
+public interface IGetCustomerById
+{
+    Task<CustomerModel?> ExecuteAsync(int id);
+}
+
+public class GetCustomerById(ICustomerService customerService) : IGetCustomerById
 {
     private readonly ICustomerService _customerService = customerService;
 
-    public async Task<CustomerModel?> Execute(int id)
+    public async Task<CustomerModel?> ExecuteAsync(int id)
     {
         if (id <= 0)
             throw new ArgumentException("Id cannot be zero or under.");

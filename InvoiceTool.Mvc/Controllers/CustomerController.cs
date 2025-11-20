@@ -1,30 +1,17 @@
-﻿using InvoiceTool.Application.Models;
-using InvoiceTool.Application.UseCases.Customers;
-using InvoiceTool.Application.UseCases.InvoiceLines;
+﻿using InvoiceTool.Application.Interfaces.UseCases;
+using InvoiceTool.Application.Models;
 using InvoiceTool.Mvc.ViewModels.Customer;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvoiceTool.Mvc.Controllers;
 
-public class CustomerController(
-    GetAllCustomers getAllCustomers,
-    GetCustomerById getCustomerById,
-    CreateCustomer createCustomer,
-    EditCustomer editCustomer,
-    DeleteCustomer deleteCustomer
-
-) : Controller
+public class CustomerController(ICustomerUseCases customerUseCases) : Controller
 {
-
-    private readonly GetAllCustomers _getAllCustomers = getAllCustomers;
-    private readonly GetCustomerById _getCustomerById = getCustomerById;
-    private readonly CreateCustomer _createCustomer = createCustomer;
-    private readonly EditCustomer _editCustomer = editCustomer;
-    private readonly DeleteCustomer _deleteCustomer = deleteCustomer;
+    private readonly ICustomerUseCases _customerUseCases = customerUseCases;
 
     public async Task<IActionResult> IndexAsync()
     {
-        var customers = await _getAllCustomers.Execute();
+        var customers = await _customerUseCases.GetAllCustomers.ExecuteAsync();
 
         var customerViewModel = new IndexCustomerViewModel { Customers = customers };
 
@@ -33,7 +20,7 @@ public class CustomerController(
 
     public async Task<IActionResult> ViewCustomer(int id)
     {
-        var customer = await _getCustomerById.Execute(id);
+        var customer = await _customerUseCases.GetCustomerById.ExecuteAsync(id);
 
         var customerViewModel = new ViewCustomerViewModel { Customer = customer };
 
@@ -51,7 +38,7 @@ public class CustomerController(
     {
         if (ModelState.IsValid)
         {
-            await _createCustomer.Execute(customer);
+            await _customerUseCases.CreateCustomer.ExecuteAsync(customer);
 
             return RedirectToAction(nameof(Index));
         }
@@ -61,7 +48,7 @@ public class CustomerController(
 
     public async Task<IActionResult> Edit(int id)
     {
-        var customer = await _getCustomerById.Execute(id);
+        var customer = await _customerUseCases.GetCustomerById.ExecuteAsync(id);
 
         var editCustomerViewModel = new EditCustomerViewModel { Customer = customer };
 
@@ -74,7 +61,7 @@ public class CustomerController(
     {
         if (ModelState.IsValid)
         {
-            await _editCustomer.Execute(customer);
+            await _customerUseCases.EditCustomer.ExecuteAsync(customer);
 
             return RedirectToAction(nameof(Index));
         }
@@ -84,7 +71,7 @@ public class CustomerController(
 
     public async Task<bool> Delete(int id)
     {
-        var isDeleted = await _deleteCustomer.Execute(id);
+        var isDeleted = await _customerUseCases.DeleteCustomer.ExecuteAsync(id);
 
         return isDeleted;
     }

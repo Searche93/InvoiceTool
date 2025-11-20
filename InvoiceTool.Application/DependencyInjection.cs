@@ -1,4 +1,5 @@
 ﻿using InvoiceTool.Application.Interfaces;
+using InvoiceTool.Application.Interfaces.UseCases;
 using InvoiceTool.Application.Services;
 using InvoiceTool.Application.UseCases.Customers;
 using InvoiceTool.Application.UseCases.InvoiceLines;
@@ -20,11 +21,13 @@ public static class DependencyInjection
         services.AddScoped<ISettingsService, SettingsService>();
         
         // UseCases
-        services.AddScoped<GetAllCustomers>();
-        services.AddScoped<GetCustomerById>();
-        services.AddScoped<CreateCustomer>();
-        services.AddScoped<EditCustomer>();
-        services.AddScoped<DeleteCustomer>();
+        services.AddScoped<ICustomerUseCases, CustomerUseCases>();
+        services.AddScoped<IGetAllCustomers, GetAllCustomers>();
+        services.AddScoped<IGetAllCustomers, GetAllCustomers>();
+        services.AddScoped<IGetCustomerById, GetCustomerById>();
+        services.AddScoped<ICreateCustomer, CreateCustomer>();
+        services.AddScoped<IEditCustomer, EditCustomer>();
+        services.AddScoped<IDeleteCustomer, DeleteCustomer>();
 
         services.AddScoped<GetAllInvoices>();
         services.AddScoped<GetInvoiceById>();

@@ -63,7 +63,7 @@ public class InvoiceController(
 
     public async Task<IActionResult> Create()
     {
-        var model = new CreateInvoiceViewModel { Customers = await _getAllCustomers.Execute() };
+        var model = new CreateInvoiceViewModel { Customers = await _getAllCustomers.ExecuteAsync() };
 
         return View(model);
     }
@@ -73,7 +73,7 @@ public class InvoiceController(
     {
         if (!ModelState.IsValid)
         {
-            model.Customers = await _getAllCustomers.Execute();
+            model.Customers = await _getAllCustomers.ExecuteAsync();
 
             return View(model.Invoice);
         }
@@ -99,7 +99,7 @@ public class InvoiceController(
         var viewModel = new EditInvoiceViewModel
         {
             Invoice = invoice,
-            Customers = await _getAllCustomers.Execute()
+            Customers = await _getAllCustomers.ExecuteAsync()
         };
 
         return View(viewModel);
@@ -110,7 +110,7 @@ public class InvoiceController(
     {
         if (!ModelState.IsValid)
         {
-            model.Customers = await _getAllCustomers.Execute();
+            model.Customers = await _getAllCustomers.ExecuteAsync();
 
             return View(model);
         }
@@ -139,7 +139,7 @@ public class InvoiceController(
 
         var invoice = await _getInvoiceById.Execute(id) ?? throw new Exception("Invoice not found.");
 
-        var customer = await _getCustomerById.Execute(invoice.CustomerId) ?? throw new Exception("Customer not found.");
+        var customer = await _getCustomerById.ExecuteAsync(invoice.CustomerId) ?? throw new Exception("Customer not found.");
 
         var downloadPdfViewModel = new DownloadPdfViewModel
         {
