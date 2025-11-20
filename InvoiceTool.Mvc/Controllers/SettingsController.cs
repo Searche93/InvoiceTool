@@ -12,7 +12,7 @@ public class SettingsController(GetSettings getSettings, SaveSettings saveSettin
     [HttpGet]
     public async Task<IActionResult> Edit()
     {
-        var settings = await _getSettings.Execute();
+        var settings = await _getSettings.ExecuteAsync();
 
         if (settings == null)
         {
@@ -32,12 +32,12 @@ public class SettingsController(GetSettings getSettings, SaveSettings saveSettin
     {
         if (!ModelState.IsValid)
         {
-            model.Settings = await _getSettings.Execute() ?? new SettingsModel();
+            model.Settings = await _getSettings.ExecuteAsync() ?? new SettingsModel();
 
             return View(model);
         }
 
-        await _saveSettings.Execute(model.Settings);
+        await _saveSettings.ExecuteAsync(model.Settings);
 
         TempData["SuccessMessage"] = "Instellingen succesvol opgeslagen!";
 

@@ -26,7 +26,7 @@ public class GetAllCustomersTests
         var useCase = new GetAllCustomers(mockedService.Object);
 
         // Act
-        var result = await useCase.Execute();
+        var result = await useCase.ExecuteAsync();
 
         // Assert
         result.Should().BeEquivalentTo(expectedResult);
@@ -44,7 +44,7 @@ public class GetAllCustomersTests
         var useCase = new GetAllCustomers(mockedService.Object);
 
         // Act
-        var result = await useCase.Execute();
+        var result = await useCase.ExecuteAsync();
 
         // Assert
         result.Should().BeEquivalentTo(new List<CustomerModel>());

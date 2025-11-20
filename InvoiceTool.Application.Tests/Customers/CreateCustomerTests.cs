@@ -30,7 +30,7 @@ public class CreateCustomerTests
         };
 
         // Act
-        var result = await useCase.Execute(customer);
+        var result = await useCase.ExecuteAsync(customer);
 
         // Assert
         result.Should().BeEquivalentTo(customer);
@@ -45,7 +45,7 @@ public class CreateCustomerTests
         var useCase = new CreateCustomer(mockedService.Object);
 
         // Act
-        var result = async () => await useCase.Execute(null!);
+        var result = async () => await useCase.ExecuteAsync(null!);
 
         // Assert
         await result.Should().ThrowAsync<ArgumentNullException>();

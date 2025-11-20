@@ -1,8 +1,7 @@
-﻿using InvoiceTool.Application.Models;
-using InvoiceTool.Application.UseCases.Customers;
+﻿using InvoiceTool.Application.Interfaces.UseCases;
+using InvoiceTool.Application.Models;
 using InvoiceTool.Application.UseCases.InvoiceLines;
 using InvoiceTool.Application.UseCases.Invoices;
-using InvoiceTool.Application.UseCases.Settings;
 using InvoiceTool.Mvc.Helpers;
 using InvoiceTool.Mvc.ViewModels.Invoice;
 using Microsoft.AspNetCore.Mvc;
@@ -19,9 +18,9 @@ public class InvoiceController(
     DeleteInvoice deleteInvoice,
     CreatePdfByteArray createPdfByteArray,
 
-    GetAllCustomers getAllCustomers,
-    GetCustomerById getCustomerById,
-    GetSettings getSettings,
+    ICustomerUseCases customerUseCases,
+    ISettingsUseCases settingsUseCases,
+
     IRazorViewToStringRenderer razorViewToStringRenderer
 ) : Controller
 {
@@ -36,9 +35,8 @@ public class InvoiceController(
 
     private readonly CreatePdfByteArray _createPdfByteArray = createPdfByteArray;
 
-    private readonly GetAllCustomers _getAllCustomers = getAllCustomers;
-    private readonly GetCustomerById _getCustomerById = getCustomerById;
-    private readonly GetSettings _getSettings = getSettings;
+    private readonly ICustomerUseCases _customerUseCases = customerUseCases;
+    private readonly ISettingsUseCases _settingsUseCases = settingsUseCases;
 
     public async Task<IActionResult> Index()
     {
@@ -63,7 +61,7 @@ public class InvoiceController(
 
     public async Task<IActionResult> Create()
     {
-        var model = new CreateInvoiceViewModel { Customers = await _getAllCustomers.ExecuteAsync() };
+        var model = new CreateInvoiceViewModel { Customers = await _customerUseCases.GetAllCustomers.ExecuteAsync() };
 
         return View(model);
     }
@@ -73,7 +71,7 @@ public class InvoiceController(
     {
         if (!ModelState.IsValid)
         {
-            model.Customers = await _getAllCustomers.ExecuteAsync();
+            model.Customers = await _customerUseCases.GetAllCustomers.ExecuteAsync();
 
             return View(model.Invoice);
         }
@@ -99,7 +97,7 @@ public class InvoiceController(
         var viewModel = new EditInvoiceViewModel
         {
             Invoice = invoice,
-            Customers = await _getAllCustomers.ExecuteAsync()
+            Customers = await _customerUseCases.GetAllCustomers.ExecuteAsync()
         };
 
         return View(viewModel);
@@ -110,7 +108,7 @@ public class InvoiceController(
     {
         if (!ModelState.IsValid)
         {
-            model.Customers = await _getAllCustomers.ExecuteAsync();
+            model.Customers = await _customerUseCases.GetAllCustomers.ExecuteAsync();
 
             return View(model);
         }
@@ -139,13 +137,13 @@ public class InvoiceController(
 
         var invoice = await _getInvoiceById.Execute(id) ?? throw new Exception("Invoice not found.");
 
-        var customer = await _getCustomerById.ExecuteAsync(invoice.CustomerId) ?? throw new Exception("Customer not found.");
+        var customer = await _customerUseCases.GetCustomerById.ExecuteAsync(invoice.CustomerId) ?? throw new Exception("Customer not found.");
 
         var downloadPdfViewModel = new DownloadPdfViewModel
         {
             Invoice = invoice,
             Customer = customer,
-            Settings = await _getSettings.Execute() ?? new SettingsModel(),
+            Settings = await _settingsUseCases.GetSettings.ExecuteAsync() ?? new SettingsModel(),
         };
 
         var html = await _razorViewToStringRenderer.RenderViewToStringAsync(this, "DownloadPdf", downloadPdfViewModel);

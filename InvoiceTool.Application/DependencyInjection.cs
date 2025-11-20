@@ -37,8 +37,9 @@ public static class DependencyInjection
         services.AddScoped<GetInvoiceByInvoiceLineIdAsync>();
         services.AddScoped<DeleteInvoice>();
         
-        services.AddScoped<GetSettings>();
-        services.AddScoped<SaveSettings>();
+        services.AddScoped<ISettingsUseCases, SettingsUseCases>();
+        services.AddScoped<IGetSettings, GetSettings>();
+        services.AddScoped<ISaveSettings, SaveSettings>();
         
         services.AddScoped<CreatePdfByteArray>();
 

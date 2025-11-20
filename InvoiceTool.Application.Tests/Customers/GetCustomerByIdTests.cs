@@ -25,7 +25,7 @@ public class GetCustomerByIdTests
         var useCase = new GetCustomerById(mockedService.Object);
 
         // Act
-        var result = await useCase.Execute(1);
+        var result = await useCase.ExecuteAsync(1);
 
         // Assert
         result.Should().BeEquivalentTo(expectedResult);
@@ -40,7 +40,7 @@ public class GetCustomerByIdTests
         var useCase = new GetCustomerById(mockedService.Object);
 
         // Act
-        var result = async () => await useCase.Execute(0);
+        var result = async () => await useCase.ExecuteAsync(0);
 
         // Assert
         await result.Should().ThrowAsync<ArgumentException>();
