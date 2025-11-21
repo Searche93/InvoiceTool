@@ -1,15 +1,13 @@
-﻿using AutoMapper;
-using InvoiceTool.Application.Interfaces;
-using InvoiceTool.Application.Mapper;
+﻿using InvoiceTool.Application.Interfaces;
 using InvoiceTool.Application.Models;
 using InvoiceTool.Domain.Entities;
 using InvoiceTool.Domain.Interfaces;
+using Mapster;
 
 namespace InvoiceTool.Application.Services;
 
 internal class InvoiceService(IInvoiceRepository invoiceRepository) : IInvoiceService
 {
-    private readonly IMapper Mapper = AutoMapperConfiguration.CreateMapper();
     private readonly IInvoiceRepository _invoiceRepository = invoiceRepository;
 
     public async Task<InvoiceModel?> GetAsync(int id)
@@ -19,7 +17,7 @@ internal class InvoiceService(IInvoiceRepository invoiceRepository) : IInvoiceSe
         if (invoice == null) return null;
 
 
-        var invoiceModel = Mapper.Map<InvoiceModel?>(invoice);
+        var invoiceModel = invoice.Adapt<InvoiceModel?>();
 
         return invoiceModel;
     }
@@ -31,7 +29,7 @@ internal class InvoiceService(IInvoiceRepository invoiceRepository) : IInvoiceSe
         if (invoice == null) return null;
 
 
-        var invoiceModel = Mapper.Map<InvoiceModel?>(invoice);
+        var invoiceModel = invoice.Adapt<InvoiceModel?>();
 
         return invoiceModel;
     }
@@ -43,18 +41,18 @@ internal class InvoiceService(IInvoiceRepository invoiceRepository) : IInvoiceSe
         if (invoices == null) return new List<InvoiceModel>();
 
 
-        var listOfInvoices = Mapper.Map<List<InvoiceModel>>(invoices);
+        var listOfInvoices = invoices.Adapt<List<InvoiceModel>>();
 
         return listOfInvoices ?? new List<InvoiceModel>();
     }
 
     public async Task<InvoiceModel> SaveAsync(InvoiceModel invoiceModel)
     {
-        var invoice = Mapper.Map<Invoice>(invoiceModel);
+        var invoice = invoiceModel.Adapt<Invoice>();
 
         var savedInvoice = await _invoiceRepository.SaveAsync(invoice);
 
-        var savedInvoiceModel = Mapper.Map<InvoiceModel>(savedInvoice);
+        var savedInvoiceModel = savedInvoice.Adapt<InvoiceModel>();
 
         return savedInvoiceModel;
     }

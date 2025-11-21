@@ -1,15 +1,13 @@
-﻿using AutoMapper;
-using InvoiceTool.Application.Interfaces;
-using InvoiceTool.Application.Mapper;
+﻿using InvoiceTool.Application.Interfaces;
 using InvoiceTool.Application.Models;
 using InvoiceTool.Domain.Entities;
 using InvoiceTool.Domain.Interfaces;
+using Mapster;
 
 namespace InvoiceTool.Application.Services;
 
 internal class CustomerService(ICustomerRepository customerRepository) : ICustomerService
 {
-    private readonly IMapper Mapper = AutoMapperConfiguration.CreateMapper();
     private readonly ICustomerRepository _customerRepository = customerRepository;
 
     public async Task<CustomerModel?> GetAsync(int id)
@@ -19,7 +17,7 @@ internal class CustomerService(ICustomerRepository customerRepository) : ICustom
         if (customer == null) return null;
 
 
-        var customerModel = Mapper.Map<CustomerModel?>(customer);
+        var customerModel = customer.Adapt<CustomerModel?>();
 
         return customerModel;
     }
@@ -31,18 +29,18 @@ internal class CustomerService(ICustomerRepository customerRepository) : ICustom
         if (customers == null) return new List<CustomerModel>();
 
 
-        var listOfCustomers = Mapper.Map<List<CustomerModel>>(customers);
+        var listOfCustomers = customers.Adapt<List<CustomerModel>>();
 
         return listOfCustomers ?? new List<CustomerModel>();
     }
 
     public async Task<CustomerModel> SaveAsync(CustomerModel customerModel)
     {
-        var customer = Mapper.Map<Customer>(customerModel);
+        var customer = customerModel.Adapt<Customer>();
 
         var savedCustomer = await _customerRepository.SaveAsync(customer);
 
-        var savedCustomerModel = Mapper.Map<CustomerModel>(savedCustomer);
+        var savedCustomerModel = savedCustomer.Adapt<CustomerModel>();
 
         return savedCustomerModel;
     }

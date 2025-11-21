@@ -1,8 +1,7 @@
-﻿using AutoMapper;
-using InvoiceTool.Application.Mapper;
-using InvoiceTool.Application.Models;
+﻿using InvoiceTool.Application.Models;
 using InvoiceTool.Domain.Entities;
 using InvoiceTool.Domain.ValueObjects;
+using Mapster;
 
 namespace InvoiceTool.Application.UseCases.Invoices;
 
@@ -13,12 +12,11 @@ public interface ICalculateInvoice
 
 public class CalculateInvoice : ICalculateInvoice
 {
-    private readonly IMapper Mapper = AutoMapperConfiguration.CreateMapper();
     public InvoiceModel Execute(InvoiceModel invoice, List<InvoiceLineModel> invoiceLines)
     {
         invoice.InvoiceLines = invoiceLines;
 
-        var invoicesLinesEntity = Mapper.Map<List<InvoiceLine>>(invoice.InvoiceLines);
+        var invoicesLinesEntity = invoice.InvoiceLines.Adapt<List<InvoiceLine>>();
 
         invoice.NetPrice = InvoiceCalculations.CalculateNetPrice(invoicesLinesEntity);
         invoice.TaxPrice = InvoiceCalculations.CalculateTaxAmount(invoicesLinesEntity);

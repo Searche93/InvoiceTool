@@ -187,7 +187,7 @@
                 <table>
                     <tr>
                         <td>Subtotaal</td>
-                    <td>€ @Model.Invoice.GrossPrice</td>
+                    <td>€ @Model.Invoice.NetPrice</td>
                 </tr>
                 <tr>
                     <td>BTW</td>
@@ -195,14 +195,14 @@
                 </tr>
                 <tr>
                     <td>Totaal incl. BTW</td>
-                    <td>€ @Model.Invoice.NetPrice</td>
+                    <td>€ @Model.Invoice.GrossPrice</td>
                 </tr>
             </table>
 
             <table class="m-t-lg">
                 <tr class="to-pay">
                     <td><span class="fs-lg bold">Te betalen</span></td>
-                    <td><span class="fs-lg bold">€ @Model.Invoice.NetPrice</span></td>
+                    <td><span class="fs-lg bold">€ @Model.Invoice.GrossPrice</span></td>
                 </tr>
             </table>
 

@@ -1,14 +1,12 @@
-﻿using AutoMapper;
-using InvoiceTool.Application.Interfaces;
-using InvoiceTool.Application.Mapper;
+﻿using InvoiceTool.Application.Interfaces;
 using InvoiceTool.Application.Models;
 using InvoiceTool.Domain.Entities;
 using InvoiceTool.Domain.Interfaces;
+using Mapster;
 
 namespace InvoiceTool.Application.Services;
 public class SettingsService(ISettingsRepository settingsRepository) : ISettingsService
 {
-    private readonly IMapper Mapper = AutoMapperConfiguration.CreateMapper();
     private readonly ISettingsRepository _settingsRepository = settingsRepository;
 
     public async Task<SettingsModel?> GetSettingsAsync(Guid id)
@@ -18,18 +16,18 @@ public class SettingsService(ISettingsRepository settingsRepository) : ISettings
         if (settings == null) return null;
 
 
-        var settingsModel = Mapper.Map<SettingsModel?>(settings);
+        var settingsModel = settings.Adapt<SettingsModel>();
 
         return settingsModel;
     }
 
     public async Task<SettingsModel> SaveAsync(SettingsModel settingsModel)
     {
-        var settings = Mapper.Map<Settings>(settingsModel);
+        var settings = settingsModel.Adapt<Settings>();
 
         var savedSettings = await _settingsRepository.SaveAsync(settings);
 
-        var savedSettingsModel = Mapper.Map<SettingsModel>(savedSettings);
+        var savedSettingsModel = savedSettings.Adapt<SettingsModel>();
 
         return savedSettingsModel;
     }

@@ -1,18 +1,17 @@
-﻿using InvoiceTool.Application.Models;
-using InvoiceTool.Application.UseCases.Settings;
+﻿using InvoiceTool.Application.Interfaces.UseCases;
+using InvoiceTool.Application.Models;
 using InvoiceTool.Mvc.ViewModels.Settings;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvoiceTool.Mvc.Controllers;
-public class SettingsController(GetSettings getSettings, SaveSettings saveSettings) : Controller
+public class SettingsController(ISettingsUseCases settingsUseCases) : Controller
 {
-    private readonly GetSettings _getSettings = getSettings;
-    private readonly SaveSettings _saveSettings = saveSettings;
+    private readonly ISettingsUseCases _settingsUseCases = settingsUseCases;
 
     [HttpGet]
     public async Task<IActionResult> Edit()
     {
-        var settings = await _getSettings.ExecuteAsync();
+        var settings = await _settingsUseCases.GetSettings.ExecuteAsync();
 
         if (settings == null)
         {
@@ -32,12 +31,12 @@ public class SettingsController(GetSettings getSettings, SaveSettings saveSettin
     {
         if (!ModelState.IsValid)
         {
-            model.Settings = await _getSettings.ExecuteAsync() ?? new SettingsModel();
+            model.Settings = await _settingsUseCases.GetSettings.ExecuteAsync() ?? new SettingsModel();
 
             return View(model);
         }
 
-        await _saveSettings.ExecuteAsync(model.Settings);
+        await _settingsUseCases.SaveSettings.ExecuteAsync(model.Settings);
 
         TempData["SuccessMessage"] = "Instellingen succesvol opgeslagen!";
 
