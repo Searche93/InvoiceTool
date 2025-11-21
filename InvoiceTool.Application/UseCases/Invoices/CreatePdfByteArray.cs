@@ -1,7 +1,13 @@
 ﻿using InvoiceTool.Application.Interfaces;
 
 namespace InvoiceTool.Application.UseCases.Invoices;
-public class CreatePdfByteArray
+
+public interface ICreatePdfByteArray
+{
+    byte[] Execute(string html, string? cssPath = null);
+}
+
+public class CreatePdfByteArray : ICreatePdfByteArray
 {
     private readonly IPdfGenerator _pdf;
 

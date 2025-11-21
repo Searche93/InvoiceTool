@@ -1,7 +1,5 @@
 ﻿using InvoiceTool.Application.Interfaces.UseCases;
 using InvoiceTool.Application.Models;
-using InvoiceTool.Application.UseCases.InvoiceLines;
-using InvoiceTool.Application.UseCases.Invoices;
 using InvoiceTool.Mvc.Helpers;
 using InvoiceTool.Mvc.ViewModels.Invoice;
 using Microsoft.AspNetCore.Mvc;
@@ -10,37 +8,22 @@ using Newtonsoft.Json;
 namespace InvoiceTool.Mvc.Controllers;
 
 public class InvoiceController(
-    GetAllInvoices getAllInvoices,
-    GetInvoiceById getInvoiceById,
-    CreateInvoice createInvoice,
-    EditInvoice editInvoice,
-    GetInvoiceLinesByInvoiceId getInvoiceLinesByInvoiceId,
-    DeleteInvoice deleteInvoice,
-    CreatePdfByteArray createPdfByteArray,
-
+    IInvoiceUseCases invoiceUseCases,
+    IInvoiceLineUseCases invoiceLineUseCases,
     ICustomerUseCases customerUseCases,
     ISettingsUseCases settingsUseCases,
-
     IRazorViewToStringRenderer razorViewToStringRenderer
 ) : Controller
 {
     private readonly IRazorViewToStringRenderer _razorViewToStringRenderer = razorViewToStringRenderer;
-
-    private readonly GetAllInvoices _getAllInvoices = getAllInvoices;
-    private readonly GetInvoiceById _getInvoiceById = getInvoiceById;
-    private readonly CreateInvoice _createInvoice = createInvoice;
-    private readonly EditInvoice _editInvoice = editInvoice;
-    private readonly GetInvoiceLinesByInvoiceId _getInvoiceLinesByInvoiceId = getInvoiceLinesByInvoiceId;
-    private readonly DeleteInvoice _deleteInvoice = deleteInvoice;
-
-    private readonly CreatePdfByteArray _createPdfByteArray = createPdfByteArray;
-
+    private readonly IInvoiceUseCases _invoiceUseCases = invoiceUseCases;
+    private readonly IInvoiceLineUseCases _invoiceLineUseCases = invoiceLineUseCases;
     private readonly ICustomerUseCases _customerUseCases = customerUseCases;
     private readonly ISettingsUseCases _settingsUseCases = settingsUseCases;
 
     public async Task<IActionResult> Index()
     {
-        var invoices = await _getAllInvoices.Execute();
+        var invoices = await _invoiceUseCases.GetAllInvoices.ExecuteAsync();
 
         var invoiceViewModel = new IndexInvoiceViewModel { Invoices = invoices };
 
@@ -49,7 +32,7 @@ public class InvoiceController(
 
     public async Task<IActionResult> ViewInvoice(int id)
     {
-        var invoice = await _getInvoiceById.Execute(id);
+        var invoice = await _invoiceUseCases.GetInvoiceById.ExecuteAsync(id);
 
         var invoiceViewModel = new ViewInvoiceViewModel
         {
@@ -79,7 +62,7 @@ public class InvoiceController(
         var invoiceLines = GenerateInvoiceLines();
 
 
-        await _createInvoice.Execute(model.Invoice, invoiceLines);
+        await _invoiceUseCases.CreateInvoice.ExecuteAsync(model.Invoice, invoiceLines);
 
         return RedirectToAction("Index");
     }
@@ -87,7 +70,7 @@ public class InvoiceController(
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
-        var invoice = await _getInvoiceById.Execute(id);
+        var invoice = await _invoiceUseCases.GetInvoiceById.ExecuteAsync(id);
 
         if (invoice == null)
         {
@@ -113,16 +96,16 @@ public class InvoiceController(
             return View(model);
         }
 
-        var invoiceLines = await _getInvoiceLinesByInvoiceId.Execute(model.Invoice.Id);
+        var invoiceLines = await _invoiceLineUseCases.GetInvoiceLinesByInvoiceId.ExecuteAsync(model.Invoice.Id);
 
-        await _editInvoice.Execute(model.Invoice, invoiceLines);
+        await _invoiceUseCases.EditInvoice.ExecuteAsync(model.Invoice, invoiceLines);
 
         return RedirectToAction("Index");
     }
 
     public async Task<bool> Delete(int id)
     {
-        var isDeleted = await _deleteInvoice.Execute(id);
+        var isDeleted = await _invoiceUseCases.DeleteInvoice.ExecuteAsync(id);
 
         return isDeleted;
     }
@@ -135,7 +118,7 @@ public class InvoiceController(
 
         if (id <= 0) throw new Exception("Invalid invoice id.");
 
-        var invoice = await _getInvoiceById.Execute(id) ?? throw new Exception("Invoice not found.");
+        var invoice = await _invoiceUseCases.GetInvoiceById.ExecuteAsync(id) ?? throw new Exception("Invoice not found.");
 
         var customer = await _customerUseCases.GetCustomerById.ExecuteAsync(invoice.CustomerId) ?? throw new Exception("Customer not found.");
 
@@ -148,7 +131,7 @@ public class InvoiceController(
 
         var html = await _razorViewToStringRenderer.RenderViewToStringAsync(this, "DownloadPdf", downloadPdfViewModel);
 
-        var bytes = _createPdfByteArray.Execute(html);
+        var bytes = _invoiceUseCases.CreatePdfByteArray.Execute(html);
 
         return File(bytes, "application/pdf", $"invoice-{invoice.Number}.pdf");
 

@@ -1,39 +1,37 @@
 ﻿using InvoiceTool.Application.Interfaces;
+using InvoiceTool.Application.Interfaces.UseCases;
 using InvoiceTool.Application.Models;
-using InvoiceTool.Application.UseCases.Invoices;
 
 namespace InvoiceTool.Application.UseCases.InvoiceLines;
 
-public class SaveInvoiceLine(
-    IInvoiceLineService invoiceLineService,
-    CalculateInvoice calculateInvoice,
-    GetInvoiceById getInvoiceById,
-    EditInvoice editInvoice
-)
+public interface ISaveInvoiceLine
+{
+    Task<InvoiceLineModel> ExecuteAsync(InvoiceLineModel invoiceLine);
+}
+
+public class SaveInvoiceLine(IInvoiceLineService invoiceLineService, IInvoiceUseCases invoiceUseCases) : ISaveInvoiceLine
 {
     private readonly IInvoiceLineService _invoiceLineService = invoiceLineService;
-    private readonly CalculateInvoice _calculateInvoice = calculateInvoice;
-    private readonly GetInvoiceById _getInvoiceById = getInvoiceById;
-    private readonly EditInvoice _editInvoice = editInvoice;
+    private readonly IInvoiceUseCases _invoiceUseCases = invoiceUseCases;
 
-    public async Task<InvoiceLineModel> Execute(InvoiceLineModel invoiceLine)
+    public async Task<InvoiceLineModel> ExecuteAsync(InvoiceLineModel invoiceLine)
     {
         var savedLine = await _invoiceLineService.SaveAsync(invoiceLine);
 
-        var invoice = await _getInvoiceById.Execute(invoiceLine.InvoiceId);
+        var invoice = await _invoiceUseCases.GetInvoiceById.ExecuteAsync(invoiceLine.InvoiceId);
 
         if (invoice?.InvoiceLines == null)
             return savedLine;
-        
 
-        var calculatedInvoice = _calculateInvoice.Execute(invoice, invoice.InvoiceLines);
+
+        var calculatedInvoice = _invoiceUseCases.CalculateInvoice.Execute(invoice, invoice.InvoiceLines);
 
         if (calculatedInvoice == null || calculatedInvoice.InvoiceLines == null)
             return savedLine;
-        
 
-        await _editInvoice.Execute(calculatedInvoice, calculatedInvoice.InvoiceLines);
-  
+
+        await _invoiceUseCases.EditInvoice.ExecuteAsync(calculatedInvoice, calculatedInvoice.InvoiceLines);
+
         return savedLine;
     }
 }

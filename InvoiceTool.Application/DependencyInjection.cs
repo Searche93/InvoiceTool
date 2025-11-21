@@ -19,7 +19,7 @@ public static class DependencyInjection
         services.AddScoped<IInvoiceLineService, InvoiceLineService>();
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<ISettingsService, SettingsService>();
-        
+
         // UseCases
         services.AddScoped<ICustomerUseCases, CustomerUseCases>();
         services.AddScoped<IGetAllCustomers, GetAllCustomers>();
@@ -29,24 +29,24 @@ public static class DependencyInjection
         services.AddScoped<IEditCustomer, EditCustomer>();
         services.AddScoped<IDeleteCustomer, DeleteCustomer>();
 
-        services.AddScoped<GetAllInvoices>();
-        services.AddScoped<GetInvoiceById>();
-        services.AddScoped<CreateInvoice>();
-        services.AddScoped<EditInvoice>();
-        services.AddScoped<CalculateInvoice>();
-        services.AddScoped<GetInvoiceByInvoiceLineIdAsync>();
-        services.AddScoped<DeleteInvoice>();
-        
+        services.AddScoped<IInvoiceUseCases, InvoiceUseCases>();
+        services.AddScoped<IGetAllInvoices, GetAllInvoices>();
+        services.AddScoped<IGetInvoiceById, GetInvoiceById>();
+        services.AddScoped<ICreateInvoice, CreateInvoice>();
+        services.AddScoped<IEditInvoice, EditInvoice>();
+        services.AddScoped<ICalculateInvoice, CalculateInvoice>();
+        services.AddScoped<IGetInvoiceByInvoiceLineId, GetInvoiceByInvoiceLineId>();
+        services.AddScoped<IDeleteInvoice, DeleteInvoice>();
+        services.AddScoped<ICreatePdfByteArray, CreatePdfByteArray>();
+
+        services.AddScoped<IInvoiceLineUseCases, InvoiceLineUseCases>();
+        services.AddScoped<IGetInvoiceLinesByInvoiceId, GetInvoiceLinesByInvoiceId>();
+        services.AddScoped<ISaveInvoiceLine, SaveInvoiceLine>();
+        services.AddScoped<IDeleteInvoiceLine, DeleteInvoiceLine>();
+
         services.AddScoped<ISettingsUseCases, SettingsUseCases>();
         services.AddScoped<IGetSettings, GetSettings>();
         services.AddScoped<ISaveSettings, SaveSettings>();
-        
-        services.AddScoped<CreatePdfByteArray>();
-
-
-        services.AddScoped<GetInvoiceLinesByInvoiceId>();
-        services.AddScoped<SaveInvoiceLine>();
-        services.AddScoped<DeleteInvoiceLine>();
 
         return services;
     }

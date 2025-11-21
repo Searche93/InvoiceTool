@@ -2,10 +2,15 @@
 
 namespace InvoiceTool.Application.UseCases.Invoices;
 
-public class DeleteInvoice(IInvoiceService invoiceService)
+public interface IDeleteInvoice
+{
+    Task<bool> ExecuteAsync(int id);
+}
+
+public class DeleteInvoice(IInvoiceService invoiceService) : IDeleteInvoice
 {
     private readonly IInvoiceService _invoiceService = invoiceService;
-    public async Task<bool> Execute(int id)
+    public async Task<bool> ExecuteAsync(int id)
     {
         if (id <= 0)
             throw new ArgumentException("Id cannot be zero or under.");

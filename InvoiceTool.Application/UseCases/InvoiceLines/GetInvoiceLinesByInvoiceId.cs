@@ -3,10 +3,15 @@ using InvoiceTool.Application.Models;
 
 namespace InvoiceTool.Application.UseCases.InvoiceLines;
 
-public class GetInvoiceLinesByInvoiceId(IInvoiceLineService invoiceLineService)
+public interface IGetInvoiceLinesByInvoiceId
+{
+    Task<List<InvoiceLineModel>> ExecuteAsync(int invoiceId);
+}
+
+public class GetInvoiceLinesByInvoiceId(IInvoiceLineService invoiceLineService) : IGetInvoiceLinesByInvoiceId
 {
     private readonly IInvoiceLineService _invoiceLineService = invoiceLineService;
-    public async Task<List<InvoiceLineModel>> Execute(int invoiceId)
+    public async Task<List<InvoiceLineModel>> ExecuteAsync(int invoiceId)
     {
         var invoiceLines = await _invoiceLineService.GetAllbyInvoiceAsync(invoiceId);
 

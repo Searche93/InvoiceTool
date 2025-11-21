@@ -6,7 +6,12 @@ using InvoiceTool.Domain.ValueObjects;
 
 namespace InvoiceTool.Application.UseCases.Invoices;
 
-public class CalculateInvoice
+public interface ICalculateInvoice
+{
+    InvoiceModel Execute(InvoiceModel invoice, List<InvoiceLineModel> invoiceLines);
+}
+
+public class CalculateInvoice : ICalculateInvoice
 {
     private readonly IMapper Mapper = AutoMapperConfiguration.CreateMapper();
     public InvoiceModel Execute(InvoiceModel invoice, List<InvoiceLineModel> invoiceLines)

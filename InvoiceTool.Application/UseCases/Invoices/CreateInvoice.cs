@@ -3,12 +3,17 @@ using InvoiceTool.Application.Models;
 
 namespace InvoiceTool.Application.UseCases.Invoices;
 
-public class CreateInvoice(IInvoiceService invoiceService, CalculateInvoice calculateInvoice)
+public interface ICreateInvoice
+{
+    Task<InvoiceModel> ExecuteAsync(InvoiceModel invoice, List<InvoiceLineModel> invoiceLines);
+}
+
+public class CreateInvoice(IInvoiceService invoiceService, ICalculateInvoice calculateInvoice) : ICreateInvoice
 {
     private readonly IInvoiceService _invoiceService = invoiceService;
-    private readonly CalculateInvoice _calculateInvoice = calculateInvoice;
+    private readonly ICalculateInvoice _calculateInvoice = calculateInvoice;
 
-    public async Task<InvoiceModel> Execute(InvoiceModel invoice, List<InvoiceLineModel> invoiceLines)
+    public async Task<InvoiceModel> ExecuteAsync(InvoiceModel invoice, List<InvoiceLineModel> invoiceLines)
     {
         invoice = _calculateInvoice.Execute(invoice, invoiceLines);
 
