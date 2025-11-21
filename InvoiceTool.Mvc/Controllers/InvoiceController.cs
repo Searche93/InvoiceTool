@@ -8,14 +8,18 @@ using Newtonsoft.Json;
 namespace InvoiceTool.Mvc.Controllers;
 
 public class InvoiceController(
+    IWebHostEnvironment env,
+    IRazorViewToStringRenderer razorViewToStringRenderer,
+
     IInvoiceUseCases invoiceUseCases,
     IInvoiceLineUseCases invoiceLineUseCases,
     ICustomerUseCases customerUseCases,
-    ISettingsUseCases settingsUseCases,
-    IRazorViewToStringRenderer razorViewToStringRenderer
+    ISettingsUseCases settingsUseCases
 ) : Controller
 {
+    private readonly IWebHostEnvironment _env = env;
     private readonly IRazorViewToStringRenderer _razorViewToStringRenderer = razorViewToStringRenderer;
+
     private readonly IInvoiceUseCases _invoiceUseCases = invoiceUseCases;
     private readonly IInvoiceLineUseCases _invoiceLineUseCases = invoiceLineUseCases;
     private readonly ICustomerUseCases _customerUseCases = customerUseCases;
@@ -122,11 +126,24 @@ public class InvoiceController(
 
         var customer = await _customerUseCases.GetCustomerById.ExecuteAsync(invoice.CustomerId) ?? throw new Exception("Customer not found.");
 
+        var settings = await _settingsUseCases.GetSettings.ExecuteAsync() ?? new SettingsModel();
+
+        if (settings != null && !string.IsNullOrEmpty(settings.CompanyLogo))
+        {
+            var logoPath = Path.Combine(_env.WebRootPath, "images", Path.GetFileName(settings.CompanyLogo));
+
+            var logoBytes = await System.IO.File.ReadAllBytesAsync(logoPath);
+
+            var base64Logo = Convert.ToBase64String(logoBytes);
+
+            settings.CompanyLogo = $"data:image/png;base64,{base64Logo}";
+        }
+
         var downloadPdfViewModel = new DownloadPdfViewModel
         {
             Invoice = invoice,
             Customer = customer,
-            Settings = await _settingsUseCases.GetSettings.ExecuteAsync() ?? new SettingsModel(),
+            Settings = settings ?? new SettingsModel(),
         };
 
         var html = await _razorViewToStringRenderer.RenderViewToStringAsync(this, "DownloadPdf", downloadPdfViewModel);

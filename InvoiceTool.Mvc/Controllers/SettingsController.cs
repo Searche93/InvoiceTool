@@ -36,6 +36,25 @@ public class SettingsController(ISettingsUseCases settingsUseCases) : Controller
             return View(model);
         }
 
+        if (model.CompanyLogoFile != null && model.CompanyLogoFile.Length > 0)
+        {
+            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+
+            if (!Directory.Exists(uploadPath))
+                Directory.CreateDirectory(uploadPath);
+
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(model.CompanyLogoFile.FileName)}";
+
+            var fullPath = Path.Combine(uploadPath, fileName);
+
+            using (var stream = new FileStream(fullPath, FileMode.Create))
+            {
+                await model.CompanyLogoFile.CopyToAsync(stream);
+            }
+
+            model.Settings.CompanyLogo = $"/images/{fileName}";
+        }
+
         await _settingsUseCases.SaveSettings.ExecuteAsync(model.Settings);
 
         TempData["SuccessMessage"] = "Instellingen succesvol opgeslagen!";

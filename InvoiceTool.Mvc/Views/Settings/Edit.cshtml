@@ -13,8 +13,7 @@
 
 <h2>Edit Settings</h2>
 
-
-<form asp-action="Edit" asp-controller="Settings" method="post">
+<form asp-action="Edit" asp-controller="Settings" method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="Settings.Id" />
 
     <div class="form-group">
@@ -77,10 +76,16 @@
         <span asp-validation-for="Settings.CompanyIban" class="text-danger"></span>
     </div>
 
+    @if (!string.IsNullOrEmpty(Model.Settings.CompanyLogo))
+    {
+        <div>
+            <img src="@Model.Settings.CompanyLogo" style="max-height:150px;" />
+        </div>
+    }
+
     <div class="form-group">
-        <label asp-for="Settings.CompanyLogo" class="control-label"></label>
-        <input asp-for="Settings.CompanyLogo" class="form-control" />
-        <span asp-validation-for="Settings.CompanyLogo" class="text-danger"></span>
+        <label>Upload nieuw logo</label>
+        <input asp-for="CompanyLogoFile" type="file" class="form-control" />
     </div>
 
     <div class="form-group">
