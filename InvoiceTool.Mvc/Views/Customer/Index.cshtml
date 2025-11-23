@@ -4,11 +4,13 @@
 
 @model IndexCustomerViewModel
 
-<div class="text-center">
-    <h1 class="display-4">Customers</h1>
+<div>
+    <div class="row mb-4">
+        <div class="col-6">
+            <h1>Customers</h1>
+        </div>
 
-    <div class="row">
-        <div class="text-end">
+        <div class="col-6 text-end">
             <a class="btn btn-primary" asp-controller="Customer" asp-action="Create">
                 Create customer
             </a>
@@ -25,8 +27,6 @@
                 <th>City</th>
                 <th>Address</th>
                 <th></th>
-                <th></th>
-                <th></th>
             </tr>
 
             @foreach(CustomerModel customer in Model.Customers)
@@ -37,17 +37,15 @@
                     <td>@customer.PostalCode</td>
                     <td>@customer.City</td>
                     <td>@customer.Address</td>
-                    <td>
-                        <a asp-action="ViewCustomer" asp-controller="Customer" asp-route-id="@customer.Id">
+                    <td class="text-end">
+                        <a asp-action="ViewCustomer" asp-controller="Customer" asp-route-id="@customer.Id" class="btn btn-success me-2">
                             View
                         </a>
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-controller="Customer" asp-route-id="@customer.Id">
+                    
+                        <a asp-action="Edit" asp-controller="Customer" asp-route-id="@customer.Id" class="btn btn-primary me-2">
                             Edit
                         </a>
-                    </td>
-                    <td>
+                    
                         <button class="btn btn-danger" onclick="deleteCustomer(@customer.Id)">
                             Delete
                         </button>

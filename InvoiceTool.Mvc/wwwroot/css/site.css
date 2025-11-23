@@ -1,31 +1,102 @@
+:root {
+    --custom-purple: #172f5c;
+    --custom-purple-dark: #0c1b32;
+    --custom-purple-light: #142540;
+    
+    --searche-purple: #101728;
+    --searche-blue: #04ade1;
+    --searche-green: #90be6d;
+    
+    --white: #ffffff;
+    
+    --border-color: #344259;
+    --border-radius: .25em;
+}
+
 html {
   font-size: 14px;
 }
-
 @media (min-width: 768px) {
   html {
     font-size: 16px;
   }
 }
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+*:hover {
+    transition: .3s;
 }
 
 body {
-  margin-bottom: 60px;
+    background-color: var(--custom-purple-dark);
+    color: var(--white);
+    padding: 1em;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* Custom */
+.menu-logo {
+    width: 100%;
+    padding: 1em;
+}
+.menu-column {
+    width: 250px;
+    min-height: calc(100% - 2em);
+    height: calc(100% - 2em);
+    position: fixed;
+    left: 1em;
+    top: 1em;
+    background-color: #f8f9fa;
+    background-color: var(--custom-purple-light);
+    padding: 1em;
+    color: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+}
+.menu-column ul {
+    list-style: none;
+    padding: 1em;
+}
+.menu-column ul li {
+    border-bottom: 1px solid var(--border-color);
+}
+.menu-column ul li a {
+    padding: .5em;
+}
+.menu-column ul li a:hover {
+    background-color: var(--custom-purple);
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.menu-column ul li i {
+    display: inline-block;
+    margin-right: .25em;
+}
+
+.main-content {
+    width: calc(100% - 300px);
+    float: right;
+    background-color: var(--custom-purple-dark);
+}
+
+.table {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+}
+.table tr th,
+.table tr td {
+    background-color: var(--custom-purple-light);
+    color: var(--white);
+    align-content: space-around;
+}
+.form-control {
+    background-color: var(--custom-purple-light);
+    color: var(--white);
+    border-color: var(--border-color);
+}
+.form-control:focus{
+    background-color: var(--custom-purple);
+    color: var(--white);
+}
+.form-group {
+    margin-bottom: .5em;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
 }

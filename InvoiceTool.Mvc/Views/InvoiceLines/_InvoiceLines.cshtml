@@ -12,7 +12,7 @@
             <td><input id="tax-percentage_@line.Id" type="number" class="form-control" value="@line.TaxPercentage" step="1" onchange="updateInvoiceLine(@line.Id)" /></td>
             <td><input id="quantity_@line.Id" type="number" class="form-control" value="@line.Quantity" step="0.01" onchange="updateInvoiceLine(@line.Id)" /></td>
             <td id="subtotal_@line.Id">@line.NetPrice</td>
-            <td><button type="button" class="btn btn-danger" onclick="removeInvoiceLine(@line.Id)">Verwijderen</button></td>
+            <td><button type="button" class="btn btn-danger" onclick="removeInvoiceLine(@line.Id)">Delete</button></td>
         </tr>
     }
 }

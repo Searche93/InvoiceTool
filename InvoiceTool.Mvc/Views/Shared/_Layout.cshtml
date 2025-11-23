@@ -8,50 +8,51 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/InvoiceTool.Mvc.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">InvoiceTool.Mvc</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+    <main role="main" class="pb-3 container-fluid position-relative">
+        <div class="row">
+            <div class="col-12">
+                <div class="menu-column">
 
+                    <img class="menu-logo" src="~/images/78e20c38-2705-4c20-ad78-79592532ef38.png" />
+
+                    <ul>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Invoice" asp-action="Index">Invoices</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fa-solid fa-chart-pie icon"></i>
+                                Dashboard
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Customer" asp-action="Index">Customers</a>
+                            <a class="nav-link" asp-controller="Invoice" asp-action="Index">
+                                <i class="fa-solid fa-file-lines"></i>
+                                Invoices
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Settings" asp-action="Edit">Settings</a>
+                            <a class="nav-link" asp-controller="Customer" asp-action="Index">
+                                <i class="fa-solid fa-users"></i>
+                                Customers
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Settings" asp-action="Edit">
+                                <i class="fa-solid fa-gear"></i>
+                                Settings
+                            </a>
                         </li>
                     </ul>
                 </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - InvoiceTool.Mvc - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                <div class="main-content">
+                    @RenderBody()
+                </div>
+            </div>
         </div>
-    </footer>
+    </main>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

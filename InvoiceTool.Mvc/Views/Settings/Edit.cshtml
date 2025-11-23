@@ -10,8 +10,7 @@
     </div>
 }
 
-
-<h2>Edit Settings</h2>
+<h1>Edit Settings</h1>
 
 <form asp-action="Edit" asp-controller="Settings" method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="Settings.Id" />
@@ -79,12 +78,12 @@
     @if (!string.IsNullOrEmpty(Model.Settings.CompanyLogo))
     {
         <div>
-            <img src="@Model.Settings.CompanyLogo" style="max-height:150px;" />
+            <img src="@Model.Settings.CompanyLogo" style="max-height:100px;" />
         </div>
     }
 
     <div class="form-group">
-        <label>Upload nieuw logo</label>
+        <label>Upload new logo</label>
         <input asp-for="CompanyLogoFile" type="file" class="form-control" />
     </div>
 

@@ -2,8 +2,14 @@
 
 @model EditCustomerViewModel
 
-
-<h2>Edit customer</h2>
+<div class="row mb-4">
+    <div class="col-9">
+        <h1>Edit customer</h1>
+    </div>
+    <div class="col-3 text-end">
+        <a href="@Url.Action("Index", "Customer")" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
 
 <form asp-action="Edit" asp-controller="Customer" method="post">
     <input type="hidden" asp-for="Customer.Id" />
@@ -38,10 +44,10 @@
         <span asp-validation-for="Customer.City" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Update</button>
+    <div class="mt-4">
+        <button type="submit" class="btn btn-primary">Update</button>
+    </div>
 </form>
-
-<a href="@Url.Action("Index", "Customer")" class="btn btn-secondary mt-2">Back to List</a>
 
 @section Scripts {
     @{

@@ -2,8 +2,14 @@
 
 @model CreateInvoiceViewModel
 
-
-<h2>Add invoice</h2>
+<div class="row mb-4">
+    <div class="col-9">
+        <h2>Add invoice</h2>
+    </div>
+    <div class="col-3 text-end">
+        <a href="@Url.Action("Index", "Invoice")" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
 
 <form asp-action="Create" method="post" id="invoiceForm">
     <div class="form-group">
@@ -21,23 +27,6 @@
         <input asp-for="@Model.Invoice.ExpirationDate" type="date" class="form-control" required />
     </div>
 
-    @*
-    <div class="form-group">
-        <label asp-for="@Model.Invoice.NetPrice"></label>
-        <input asp-for="@Model.Invoice.NetPrice" class="form-control" readonly id="netPrice" />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="@Model.Invoice.TaxPrice"></label>
-        <input asp-for="@Model.Invoice.TaxPrice" class="form-control" readonly id="taxPrice" />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="@Model.Invoice.GrossPrice"></label>
-        <input asp-for="@Model.Invoice.GrossPrice" class="form-control" readonly id="grossPrice" />
-    </div>
-    *@
-
     <div class="form-group">
         <label asp-for="@Model.Invoice.CustomerId">Klant</label>
         <select asp-for="@Model.Invoice.CustomerId" class="form-control">
@@ -50,26 +39,26 @@
     </div>
 
 
-    <h3>Factuurregels</h3>
+    <h3>Invoice lines</h3>
     <table class="table">
         <thead>
             <tr>
-                <th>Omschrijving</th>
-                <th>Stuks prijs</th>
-                <th>BTW percentage</th>
-                <th>Aantal</th>
-                <th>Subtotaal</th>
-                <th>Acties</th>
+                <th>Description</th>
+                <th>Price per unit</th>
+                <th>VAT percentage</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th></th>
             </tr>
         </thead>
         <tbody id="invoiceLinesTable"></tbody>
     </table>
 
-    <button type="button" class="btn btn-primary" onclick="addInvoiceLine()">Regel toevoegen</button>
+    <button type="button" class="btn btn-primary" onclick="addInvoiceLine()">Add line</button>
 
     <input type="hidden" name="InvoiceLinesJson" id="invoiceLinesInput" />
 
-    <button type="submit" class="btn btn-success">Opslaan</button>
+    <button type="submit" class="btn btn-success">Save</button>
 </form>
 
 @section Scripts {

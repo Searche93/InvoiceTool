@@ -14,10 +14,11 @@
             <a asp-action="DownloadPdf" asp-controller="Invoice" asp-route-id="@Model.Invoice.Id" class="btn btn-primary">
                 Download Factuur
             </a>
+            <a href="@Url.Action("Index", "Invoice")" class="btn btn-secondary">Back to List</a>
         </div>
     </div>
 
-    <table class="table">
+    <table class="table mb-4">
         <tr>
             <td>Number</td>
             <td>@Model.Invoice.Number</td>

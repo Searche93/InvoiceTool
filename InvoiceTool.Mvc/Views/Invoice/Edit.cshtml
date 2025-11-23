@@ -1,7 +1,14 @@
 ﻿@using InvoiceTool.Mvc.ViewModels.Invoice
 @model EditInvoiceViewModel
 
-<h2>Wijzig factuur</h2>
+<div class="row mb-4">
+    <div class="col-9">
+        <h2>Edit invoice</h2>
+    </div>
+    <div class="col-3 text-end">
+        <a href="@Url.Action("Index", "Invoice")" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
 
 <form asp-action="Edit" method="post" id="invoiceForm">
     <input type="hidden" asp-for="Invoice.Id" />
@@ -37,23 +44,23 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="Invoice.CustomerId">Klant</label>
+        <label asp-for="Invoice.CustomerId">Customer</label>
         <select asp-for="Invoice.CustomerId" class="form-control" asp-items="@(new SelectList(Model.Customers, "Id", "Name"))">
-            <option value="">Selecteer een klant</option>
+            <option value="">Select customer</option>
         </select>
     </div>
 
 
-    <h3>Factuurregels</h3>
+    <h3 class="mt-4">Invoice lines</h3>
     <table class="table">
         <thead>
             <tr>
-                <th>Omschrijving</th>
-                <th>Stuks prijs</th>
-                <th>BTW percentage</th>
-                <th>Aantal</th>
-                <th>Subtotaal</th>
-                <th>Acties</th>
+                <th>Description</th>
+                <th>Price per unit</th>
+                <th>VAT percentage</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th></th>
             </tr>
         </thead>
         
@@ -61,13 +68,12 @@
 
     </table>
 
-    <button type="button" class="btn btn-primary" onclick="addInvoiceLine()">Regel toevoegen</button>
+    <button type="button" class="btn btn-primary" onclick="addInvoiceLine()">Add line</button>
 
     <input type="hidden" name="InvoiceLinesJson" id="invoiceLinesInput" value='@Html.Raw(Json.Serialize(Model.Invoice.InvoiceLines))' />
 
-    <button type="submit" class="btn btn-success">Opslaan</button>
+    <button type="submit" class="btn btn-success">Save</button>
 </form>
-
 
 @section Scripts {
     <script>
