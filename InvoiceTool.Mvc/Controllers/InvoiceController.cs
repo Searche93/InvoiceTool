@@ -1,5 +1,6 @@
 ﻿using InvoiceTool.Application.Interfaces.UseCases;
 using InvoiceTool.Application.Models;
+using InvoiceTool.Domain.Enums;
 using InvoiceTool.Mvc.Helpers;
 using InvoiceTool.Mvc.ViewModels.Invoice;
 using Microsoft.AspNetCore.Mvc;
@@ -81,10 +82,13 @@ public class InvoiceController(
             return NotFound();
         }
 
+        var customers = await _customerUseCases.GetAllCustomers.ExecuteAsync();
+
         var viewModel = new EditInvoiceViewModel
         {
             Invoice = invoice,
-            Customers = await _customerUseCases.GetAllCustomers.ExecuteAsync()
+            Customers = customers,
+            PaymentStatusList = EnumHelper.GetSelectListFromEnum<PaymentStatus>()
         };
 
         return View(viewModel);
@@ -96,6 +100,8 @@ public class InvoiceController(
         if (!ModelState.IsValid)
         {
             model.Customers = await _customerUseCases.GetAllCustomers.ExecuteAsync();
+
+            model.PaymentStatusList = EnumHelper.GetSelectListFromEnum<PaymentStatus>();
 
             return View(model);
         }

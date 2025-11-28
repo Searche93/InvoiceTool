@@ -50,6 +50,12 @@
         </select>
     </div>
 
+    <div class="form-group">
+        <label asp-for="Invoice.PaymentStatus">Payment Status</label>
+        <select asp-for="Invoice.PaymentStatus" asp-items="Model.PaymentStatusList" class="form-control">
+        </select>
+    </div>
+
 
     <h3 class="mt-4">Invoice lines</h3>
     <table class="table">
@@ -72,7 +78,12 @@
 
     <input type="hidden" name="InvoiceLinesJson" id="invoiceLinesInput" value='@Html.Raw(Json.Serialize(Model.Invoice.InvoiceLines))' />
 
-    <button type="submit" class="btn btn-success">Save</button>
+    <div class="row mt-4">
+        <div class="col-12">
+            <button type="submit" class="btn btn-success">Save invoice</button>
+        </div>
+    </div>
+
 </form>
 
 @section Scripts {
