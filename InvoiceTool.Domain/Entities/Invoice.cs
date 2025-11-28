@@ -1,4 +1,6 @@
-﻿namespace InvoiceTool.Domain.Entities;
+﻿using InvoiceTool.Domain.Enums;
+
+namespace InvoiceTool.Domain.Entities;
 public class Invoice
 {
     public int Id { get; set; }
@@ -9,5 +11,6 @@ public class Invoice
     public decimal TaxPrice { get; set; }
     public decimal GrossPrice { get; set; }
     public int? CustomerId { get; set; }
+    public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Pending;
     public List<InvoiceLine>? InvoiceLines { get; set; }
 }

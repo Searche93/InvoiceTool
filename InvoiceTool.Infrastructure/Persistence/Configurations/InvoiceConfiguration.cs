@@ -13,6 +13,9 @@ public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
         builder.Property(i => i.Number)
             .IsRequired();
 
+        builder.Property(i => i.PaymentStatus)
+            .HasConversion<int>();
+
         builder.HasMany(i => i.InvoiceLines)
             .WithOne(l => l.Invoice)
             .HasForeignKey(l => l.InvoiceId)

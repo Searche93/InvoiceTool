@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using InvoiceTool.Domain.Enums;
+using System.Globalization;
 
 namespace InvoiceTool.Application.Models;
 
@@ -15,5 +16,6 @@ public class InvoiceModel
     public decimal GrossPrice { get; set; }
 
     public int CustomerId { get; set; }
+    public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Pending;
     public List<InvoiceLineModel>? InvoiceLines { get; set; }
 }
