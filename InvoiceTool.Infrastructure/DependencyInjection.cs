@@ -1,11 +1,9 @@
-﻿using InvoiceTool.Application.Interfaces;
-using InvoiceTool.Domain.Interfaces;
-using InvoiceTool.Infrastructure.Files;
-using InvoiceTool.Infrastructure.Persistence;
-using InvoiceTool.Infrastructure.Persistence.Repositories;
+﻿using InvoiceTool.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Scrutor;
+using System.Reflection;
 
 namespace InvoiceTool.Infrastructure;
 
@@ -16,12 +14,12 @@ public static class DependencyInjection
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-        services.AddScoped<IInvoiceRepository, InvoiceRepository>();
-        services.AddScoped<IInvoiceLineRepository, InvoiceLineRepository>();
-        services.AddScoped<ICustomerRepository, CustomerRepository>();
-        services.AddScoped<ISettingsRepository, SettingsRepository>();
-
-        services.AddScoped<IPdfGenerator, PdfGenerator>();
+        services.Scan(selector => selector.FromAssemblies(Assembly.GetExecutingAssembly())
+            .AddClasses(false)
+            .UsingRegistrationStrategy(RegistrationStrategy.Skip)
+            .AsMatchingInterface()
+            .WithScopedLifetime()
+        );
 
         return services;
     }
