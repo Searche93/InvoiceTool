@@ -6,6 +6,7 @@ public interface IPdfGenerator
     /// </summary>
     /// <param name="html"></param>
     /// <param name="cssPath"></param>
+    /// <param name="documentTitle"></param>
     /// <returns>Generate a byte array to save as PDF file.</returns>
-    byte[] GeneratePdf(string html, string? cssPath = null);
+    byte[] GeneratePdf(string html, string? cssPath = null, string? documentTitle = null);
 }

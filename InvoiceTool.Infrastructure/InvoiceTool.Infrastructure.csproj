@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DocumentTools" Version="0.0.7" />
+    <PackageReference Include="DinkToPdf" Version="1.0.8" />
     <PackageReference Include="Mapster" Version="7.4.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
@@ -25,6 +25,14 @@
   <ItemGroup>
     <ProjectReference Include="..\InvoiceTool.Application\InvoiceTool.Application.csproj" />
     <ProjectReference Include="..\InvoiceTool.Domain\InvoiceTool.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<Content Include="NativeLibs\libwkhtmltox.dll">
+	    <Pack>true</Pack>
+		<PackagePath>runtimes/win-x64/native/</PackagePath>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
   </ItemGroup>
 
 </Project>
