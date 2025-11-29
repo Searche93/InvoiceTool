@@ -1,15 +1,25 @@
 using InvoiceTool.Application;
 using InvoiceTool.Domain;
 using InvoiceTool.Infrastructure;
+using InvoiceTool.Infrastructure.Persistence;
 using InvoiceTool.Mvc.Helpers;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found."); ;
+
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<AppDbContext>();
 
 // Add config
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddEnvironmentVariables();
-
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -44,5 +54,28 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+app.MapRazorPages();
+
+
+var userName = builder.Configuration["Auth:UserName"];
+var password = builder.Configuration["Auth:Password"];
+
+if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
+{
+    using var scope = app.Services.CreateScope();
+
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+    if (await userManager.FindByEmailAsync(userName) == null)
+    {
+        var user = new ApplicationUser
+        {
+            Email = userName,
+            UserName = userName
+        };
+
+        await userManager.CreateAsync(user, password);
+    }
+}
 
 app.Run();
