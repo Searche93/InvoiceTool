@@ -32,6 +32,28 @@ body {
 }
 
 /* Custom */
+.btn {
+    transition: 0.3s ease;
+}
+.btn-primary,
+.btn-primary:hover {
+    background-color: var(--searche-blue);
+    border-color: var(--searche-blue);
+}
+.btn-primary:hover {
+    filter: brightness(.90);
+}
+.btn-success,
+.btn-success:hover {
+    background-color: var(--searche-green);
+    border-color: var(--searche-green);
+}
+.btn-success:hover {
+    filter: brightness(.90);
+}
+
+
+
 .menu-logo {
     width: 100%;
     padding: 1em;
@@ -70,7 +92,7 @@ body {
 }
 
 .main-content {
-    width: calc(100% - 300px);
+    width: calc(100% - calc(250px + 1em));
     float: right;
     background-color: var(--custom-purple-dark);
 }
