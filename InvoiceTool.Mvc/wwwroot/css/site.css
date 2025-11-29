@@ -22,7 +22,7 @@ html {
   }
 }
 *:hover {
-    transition: .3s;
+    transition: .3s ease;
 }
 
 body {
@@ -32,6 +32,7 @@ body {
 }
 
 /* Custom */
+.color-white { color: var(--white) !important }
 .btn {
     transition: 0.3s ease;
 }
