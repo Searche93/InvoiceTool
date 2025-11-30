@@ -209,7 +209,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     list-style: none;
-    min-width: 200px;
     max-width: 100%;
     text-align: right;
 }
