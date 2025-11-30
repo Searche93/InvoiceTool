@@ -1,9 +1,12 @@
 ﻿using InvoiceTool.Application.Interfaces.UseCases;
 using InvoiceTool.Application.Models;
 using InvoiceTool.Mvc.ViewModels.Settings;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvoiceTool.Mvc.Controllers;
+
+[Authorize]
 public class SettingsController(ISettingsUseCases settingsUseCases) : Controller
 {
     private readonly ISettingsUseCases _settingsUseCases = settingsUseCases;

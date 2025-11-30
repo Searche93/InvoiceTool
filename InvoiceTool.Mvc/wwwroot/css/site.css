@@ -52,7 +52,11 @@ body {
 .btn-success:hover {
     filter: brightness(.90);
 }
-
+.body-content form {
+    background-color: var(--custom-purple-light);
+    padding: 1em;
+    border-radius: .25em;
+}
 
 
 .menu-logo {
@@ -79,9 +83,16 @@ body {
 }
 .menu-column ul li {
     border-bottom: 1px solid var(--border-color);
+    margin-bottom: .75em;
 }
 .menu-column ul li a {
     padding: .5em;
+    padding: .5em;
+    display: flex;
+    align-items: center;
+    gap: .75em;
+    text-decoration: none;
+    border-radius: .25em;
 }
 .menu-column ul li a:hover {
     background-color: var(--custom-purple);
@@ -122,4 +133,36 @@ body {
 }
 input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
+}
+
+.top-bar {
+    padding: .5em 1em;
+    border-radius: .25em;
+    background-color: var(--custom-purple-light);
+    margin-bottom: 1.5em;
+    border: 1px solid var(--border-color);
+}
+
+.top-bar form {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.top-bar input {
+    background-color: var(--custom-purple-light);
+    border: 1px solid var(--border-color);
+    border-radius: .25em;
+    width: 100%;
+    padding-left: 2.5em;
+    color: var(--white);
+}
+
+.top-bar form svg {
+    position: absolute;
+    left: 0.75em;
+    z-index: 10;
+    pointer-events: none;
+    color: var(--border-color);
+    width: 1em;
 }

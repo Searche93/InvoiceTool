@@ -1,9 +1,11 @@
 ﻿using InvoiceTool.Application.Interfaces.UseCases;
 using InvoiceTool.Application.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvoiceTool.Mvc.Controllers;
 
+[Authorize]
 public class InvoiceLineController(IInvoiceLineUseCases invoiceLineUseCases) : Controller
 {
     private readonly IInvoiceLineUseCases _invoiceLineUseCases = invoiceLineUseCases;

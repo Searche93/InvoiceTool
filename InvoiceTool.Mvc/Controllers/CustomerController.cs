@@ -1,10 +1,12 @@
 ﻿using InvoiceTool.Application.Interfaces.UseCases;
 using InvoiceTool.Application.Models;
 using InvoiceTool.Mvc.ViewModels.Customer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvoiceTool.Mvc.Controllers;
 
+[Authorize]
 public class CustomerController(ICustomerUseCases customerUseCases) : Controller
 {
     private readonly ICustomerUseCases _customerUseCases = customerUseCases;

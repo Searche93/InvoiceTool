@@ -3,11 +3,13 @@ using InvoiceTool.Application.Models;
 using InvoiceTool.Domain.Enums;
 using InvoiceTool.Mvc.Helpers;
 using InvoiceTool.Mvc.ViewModels.Invoice;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace InvoiceTool.Mvc.Controllers;
 
+[Authorize]
 public class InvoiceController(
     IWebHostEnvironment env,
     IRazorViewToStringRenderer razorViewToStringRenderer,
