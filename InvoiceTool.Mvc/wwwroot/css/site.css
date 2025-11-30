@@ -2,25 +2,24 @@
     --custom-purple: #172f5c;
     --custom-purple-dark: #0c1b32;
     --custom-purple-light: #142540;
-    
     --searche-purple: #101728;
     --searche-blue: #04ade1;
     --searche-green: #90be6d;
-    
     --white: #ffffff;
-    
     --border-color: #344259;
     --border-radius: .25em;
 }
 
-html {
-  font-size: 14px;
+html {    
+    font-size: 14px;
 }
+
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
+
 *:hover {
     transition: .3s ease;
 }
@@ -32,26 +31,34 @@ body {
 }
 
 /* Custom */
-.color-white { color: var(--white) !important }
+.color-white {
+    color: var(--white) !important
+}
+
 .btn {
     transition: 0.3s ease;
 }
+
 .btn-primary,
 .btn-primary:hover {
     background-color: var(--searche-blue);
     border-color: var(--searche-blue);
 }
+
 .btn-primary:hover {
     filter: brightness(.90);
 }
+
 .btn-success,
 .btn-success:hover {
     background-color: var(--searche-green);
     border-color: var(--searche-green);
 }
+
 .btn-success:hover {
     filter: brightness(.90);
 }
+
 .body-content form {
     background-color: var(--custom-purple-light);
     padding: 1em;
@@ -63,6 +70,7 @@ body {
     width: 100%;
     padding: 1em;
 }
+
 .menu-column {
     width: 250px;
     min-height: calc(100% - 2em);
@@ -70,21 +78,23 @@ body {
     position: fixed;
     left: 1em;
     top: 1em;
-    background-color: #f8f9fa;
     background-color: var(--custom-purple-light);
     padding: 1em;
     color: var(--white);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
 }
+
 .menu-column ul {
     list-style: none;
     padding: 1em;
 }
+
 .menu-column ul li {
     border-bottom: 1px solid var(--border-color);
     margin-bottom: .75em;
 }
+
 .menu-column ul li a {
     padding: .5em;
     padding: .5em;
@@ -94,6 +104,7 @@ body {
     text-decoration: none;
     border-radius: .25em;
 }
+
 .menu-column ul li a:hover {
     background-color: var(--custom-purple);
 }
@@ -113,24 +124,29 @@ body {
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
 }
+
 .table tr th,
 .table tr td {
     background-color: var(--custom-purple-light);
     color: var(--white);
     align-content: space-around;
 }
+
 .form-control {
     background-color: var(--custom-purple-light);
     color: var(--white);
     border-color: var(--border-color);
 }
-.form-control:focus{
+
+.form-control:focus {
     background-color: var(--custom-purple);
     color: var(--white);
 }
+
 .form-group {
     margin-bottom: .5em;
 }
+
 input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
 }
@@ -157,6 +173,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     padding-left: 2.5em;
     color: var(--white);
 }
+.top-bar input::placeholder {
+    color: var(--border-color);
+    font-size: 1em;
+}
 
 .top-bar form svg {
     position: absolute;
@@ -165,4 +185,42 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     pointer-events: none;
     color: var(--border-color);
     width: 1em;
+}
+
+.hover-menu {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.user-menu {
+    padding-top: 2.5em;
+    display: none;
+    position: absolute;
+    right: -1em;
+    top: 0;
+    z-index: 1000;
+}
+
+.user-menu ul {
+    background-color: var(--custom-purple-light);
+    padding: 0.5em 1em;
+    color: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    list-style: none;
+    min-width: 200px;
+    max-width: 100%;
+    text-align: right;
+}
+
+.hover-menu:hover .user-menu {
+    display: block;
+}
+
+.user-menu ul li a {
+    color: var(--white);
+    text-decoration: none;
+    display: block;
+    width: 100%;
 }
