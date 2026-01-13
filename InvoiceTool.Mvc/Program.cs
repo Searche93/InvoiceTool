@@ -2,6 +2,7 @@ using InvoiceTool.Application;
 using InvoiceTool.Domain;
 using InvoiceTool.Infrastructure;
 using InvoiceTool.Infrastructure.Persistence;
+using InvoiceTool.Mvc.Data;
 using InvoiceTool.Mvc.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -59,11 +60,10 @@ app.MapRazorPages();
 
 var userName = builder.Configuration["Auth:UserName"];
 var password = builder.Configuration["Auth:Password"];
+using var scope = app.Services.CreateScope();
 
 if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
 {
-    using var scope = app.Services.CreateScope();
-
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
     if (await userManager.FindByEmailAsync(userName) == null)
@@ -76,6 +76,16 @@ if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
 
         await userManager.CreateAsync(user, password);
     }
+}
+
+var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+var addDummyData = config.GetValue<bool>("Settings:AddDummyData");
+
+if (addDummyData)
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    DummyDataSeeder.Seed(db);
 }
 
 app.Run();
