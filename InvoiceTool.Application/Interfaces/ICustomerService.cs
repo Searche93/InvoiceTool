@@ -30,4 +30,13 @@ public interface ICustomerService
     /// <param name="customerId"></param>
     /// <returns>True if deleted succesfull</returns>
     Task<bool> DeleteAsync(int customerId);
+
+    /// <summary>
+    /// Asynchronously searches for customers whose details match the specified input string.
+    /// </summary>
+    /// <param name="searchInput">The text to search for within customer records. This may include a name, email address, or other identifying
+    /// information. Cannot be null or empty.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains a list of customers matching the
+    /// search criteria. The list will be empty if no matches are found.</returns>
+    Task<List<CustomerModel>> SearchAsync(string searchInput);
 }

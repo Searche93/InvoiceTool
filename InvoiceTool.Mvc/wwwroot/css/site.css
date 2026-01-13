@@ -167,10 +167,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .top-bar input {
     background-color: var(--custom-purple-light);
-    border: 1px solid var(--border-color);
-    border-radius: .25em;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    border-left: none;
+    border-top-right-radius: .25em;
+    border-bottom-right-radius: .25em;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
     width: 100%;
-    padding-left: 2.5em;
+    padding-left: 1em;
     color: var(--white);
 }
 .top-bar input::placeholder {
@@ -178,13 +184,27 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-size: 1em;
 }
 
-.top-bar form svg {
+.top-bar form button {
     position: absolute;
-    left: 0.75em;
+    right: 0.5em;
     z-index: 10;
-    pointer-events: none;
-    color: var(--border-color);
-    width: 1em;
+    background: none;
+    border: none;
+    color: var(--white);
+    padding-bottom: .25em;
+}
+.top-bar form select {
+    padding: .10em;
+    color: var(--white);
+    background-color: var(--custom-purple-light);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+    border-right: none;
+    border-top-left-radius: .25em;
+    border-bottom-left-radius: .25em;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 .hover-menu {

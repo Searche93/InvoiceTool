@@ -61,4 +61,15 @@ internal class InvoiceService(IInvoiceRepository invoiceRepository) : IInvoiceSe
     {
         return await _invoiceRepository.DeleteAsync(invoiceId);
     }
+
+    public async Task<List<InvoiceModel>> SearchAsync(string searchInput)
+    {
+        var invoices = await _invoiceRepository.SearchAsync(searchInput);
+        
+        if (invoices == null) return new List<InvoiceModel>();
+        
+        var listOfInvoices = invoices.Adapt<List<InvoiceModel>>();
+     
+        return listOfInvoices ?? new List<InvoiceModel>();
+    }
 }

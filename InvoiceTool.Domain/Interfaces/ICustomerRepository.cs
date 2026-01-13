@@ -30,5 +30,14 @@ namespace InvoiceTool.Domain.Interfaces
         /// <param name="customerId"></param>
         /// <returns>True if deleted succesfull</returns>
         Task<bool> DeleteAsync(int customerId);
+
+        /// <summary>
+        /// Asynchronously searches for customers whose details match the specified input string.
+        /// </summary>
+        /// <param name="searchInput">The text to search for within customer records. This value can include partial names, email addresses, or
+        /// other identifying information. Cannot be null or empty.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains a list of customers matching the
+        /// search criteria. If no customers are found, the list will be empty.</returns>
+        Task<List<Customer>> SearchAsync(string searchInput);
     }
 }

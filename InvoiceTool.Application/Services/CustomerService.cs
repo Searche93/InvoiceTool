@@ -49,4 +49,15 @@ internal class CustomerService(ICustomerRepository customerRepository) : ICustom
     {
         return await _customerRepository.DeleteAsync(customerId);
     }
+
+    public async Task<List<CustomerModel>> SearchAsync(string searchInput)
+    {
+        var customers = await _customerRepository.SearchAsync(searchInput);
+        
+        if (customers == null) return new List<CustomerModel>();
+        
+        var listOfCustomers = customers.Adapt<List<CustomerModel>>();
+     
+        return listOfCustomers ?? new List<CustomerModel>();
+    }
 }

@@ -57,4 +57,18 @@ internal class CustomerRepository(AppDbContext context) : ICustomerRepository
 
         return numberOfDeletedRecords > 0;
     }
+
+    public async Task<List<Customer>> SearchAsync(string searchInput)
+    {
+        var customers = await _context.Customers
+            .AsNoTracking()
+            .Where(c => c.Name.Contains(searchInput) || 
+                c.CompanyName.Contains(searchInput) ||
+                c.Address.Contains(searchInput) ||
+                c.PostalCode.Contains(searchInput) ||
+                c.City.Contains(searchInput)
+            )
+            .ToListAsync();
+        return customers ?? new List<Customer>();
+    }
 }

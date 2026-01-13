@@ -1,0 +1,71 @@
+﻿@using InvoiceTool.Application.Models
+@using InvoiceTool.Mvc.ViewModels
+@using InvoiceTool.Mvc.ViewModels.Search
+
+@model SearchResultsViewModel
+
+<div>
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1>Search results for word: @Model.SearchInput</h1>
+        </div>
+    </div>
+
+    @if (Model?.Customers?.Count > 0)
+    {
+        <h3>Customers</h3>
+        <table class="table">
+            <tr>
+                <th>Name</th>
+                <th>Company</th>
+                <th>Postal</th>
+                <th>City</th>
+                <th>Address</th>
+                <th></th>
+            </tr>
+
+            @foreach (CustomerModel customer in Model.Customers)
+            {
+                <tr>
+                    <td>@customer.Name</td>
+                    <td>@customer.CompanyName</td>
+                    <td>@customer.PostalCode</td>
+                    <td>@customer.City</td>
+                    <td>@customer.Address</td>
+                    <td class="text-end">
+                        <a asp-action="ViewCustomer" asp-controller="Customer" asp-route-id="@customer.Id" class="btn btn-success me-2">
+                            View
+                        </a>
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+
+    @if(Model?.Invoices?.Count > 0)
+    {
+        <h3>Invoices</h3>
+        <table class="table">
+            <tr>
+                <th>Number</th>
+                <th>Date</th>
+                <th>Expiration date</th>
+                <th></th>
+            </tr>
+
+            @foreach(InvoiceModel invoice in Model.Invoices)
+            {
+                <tr>
+                    <td>@invoice.Number</td>
+                    <td>@invoice.DateValue</td>
+                    <td>@invoice.ExpirationDateValue</td>
+                    <td class="text-end">
+                        <a asp-action="ViewInvoice" asp-controller="Invoice" asp-route-id="@invoice.Id" class="btn btn-success me-2">
+                            View
+                        </a>
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+</div>

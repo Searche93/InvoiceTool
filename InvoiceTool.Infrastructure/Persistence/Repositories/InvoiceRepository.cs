@@ -71,4 +71,13 @@ internal class InvoiceRepository(AppDbContext context) : IInvoiceRepository
 
         return numberOfDeletedRecords > 0;
     }
+
+    public async Task<List<Invoice>> SearchAsync(string searchInput)
+    {
+        var invoices = await _context.Invoices
+            .AsNoTracking()
+            .Where(i => i.Number.Contains(searchInput))
+            .ToListAsync();
+        return invoices ?? new List<Invoice>();
+    }
 }

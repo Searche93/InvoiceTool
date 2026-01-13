@@ -37,4 +37,13 @@ public interface IInvoiceRepository
     /// <param name="invoiceId"></param>
     /// <returns>True if deleted succesfully</returns>
     Task<bool> DeleteAsync(int invoiceId);
+
+    /// <summary>
+    /// Asynchronously searches for invoices that match the specified input criteria.
+    /// </summary>
+    /// <param name="searchInput">The search string used to filter invoices. This may include keywords, invoice numbers, or other identifying
+    /// information. Cannot be null.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains a list of invoices matching the
+    /// search criteria. The list will be empty if no invoices are found.</returns>
+    Task<List<Invoice>> SearchAsync(string searchInput);
 }

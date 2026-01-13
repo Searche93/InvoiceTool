@@ -50,10 +50,22 @@
                     <div class="top-bar">
                         <div class="row">
                             <div class="col-6">
-                                <form>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg>
-                                    <input type="text" placeholder="Search anything" />
+                                <form asp-controller="Search" asp-action="SearchResults" method="post">
+                                    @Html.AntiForgeryToken()
+
+                                    <select name="entity">
+                                        <option value="0">All</option>
+                                        <option value="1000">Invoices</option>
+                                        <option value="2000">Customers</option>
+                                    </select>
+
+                                    <input type="text" name="searchInput" placeholder="Search anything" />
+
+                                    <button type="submit">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg>
+                                    </button>
                                 </form>
+
                             </div>
 
                             <div class="col-6 text-end">
