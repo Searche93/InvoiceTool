@@ -79,13 +79,13 @@ if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
 }
 
 var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-var addDummyData = config.GetValue<bool>("Settings:AddDummyData");
+var addDemoData = config.GetValue<bool>("Settings:AddDemoData");
 
-if (addDummyData)
+if (addDemoData)
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-    DummyDataSeeder.Seed(db);
+    DemoDataSeeder.Seed(db);
 }
 
 app.Run();

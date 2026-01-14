@@ -1,1 +1,44 @@
-﻿<h1>Dashboard</h1>
+﻿@using InvoiceTool.Application.UseCases.Statistics.Results
+
+@model MonthlyRevenueResult
+
+<h1><a href="#"></a></h1>
+
+<canvas id="revenueChart" class="revenueChart" height="100  "></canvas>
+
+<script>
+    const labels = @Html.Raw(Json.Serialize(Model.Labels));
+    const datasets = [];
+
+    for (const [year, values] of Object.entries(@Html.Raw(Json.Serialize(Model.YearValues))))
+    {
+        datasets.push({
+            label: year,
+            data: values,
+            backgroundColor: year == "2026" ? 'rgba(54, 162, 235, 0.7)' :
+                             year == "2025" ? 'rgba(75, 192, 192, 0.7)' :
+                             'rgba(255, 206, 86, 0.7)',
+            borderColor: 'rgba(0,0,0,0.7)',
+            borderWidth: 1
+        });
+    }
+
+    new Chart(document.getElementById('revenueChart'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: value => '€ ' + value.toLocaleString()
+                    }
+                }
+            }
+        }
+    });
+</script>

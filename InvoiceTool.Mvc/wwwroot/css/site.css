@@ -130,6 +130,11 @@ body {
     background-color: var(--custom-purple-light);
     color: var(--white);
     align-content: space-around;
+    font-size: .9em;
+}
+.table tr td .btn {
+    font-size: .9em;
+    padding: .25em .75em;
 }
 
 .form-control {

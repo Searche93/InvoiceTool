@@ -1,29 +1,23 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+using InvoiceTool.Application.Interfaces.UseCases;
 using InvoiceTool.Mvc.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace InvoiceTool.Mvc.Controllers;
 
 [Authorize]
-public class HomeController : Controller
+public class HomeController(IStatsUseCases statsUseCases) : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly IStatsUseCases _statsUseCases = statsUseCases;
 
-    public HomeController(ILogger<HomeController> logger)
+    public async Task<IActionResult> Index()
     {
-        _logger = logger;
+        var model = await _statsUseCases.GetYearlyInvoicedAmountStatic.Execute();
+
+        return View(model);
     }
 
-    public IActionResult Index()
-    {
-        return View();
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
-    }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

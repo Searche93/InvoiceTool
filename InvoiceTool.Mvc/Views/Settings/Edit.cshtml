@@ -10,7 +10,11 @@
     </div>
 }
 
-<h1>Edit Settings</h1>
+<div class="row mb-4">
+    <div class="col-12">
+        <h1>Edit Settings</h1>
+    </div>
+</div>
 
 <form asp-action="Edit" asp-controller="Settings" method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="Settings.Id" />
