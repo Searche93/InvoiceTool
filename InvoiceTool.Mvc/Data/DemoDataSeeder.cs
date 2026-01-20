@@ -1,4 +1,5 @@
-﻿using InvoiceTool.Domain.Entities;
+﻿using Bogus;
+using InvoiceTool.Domain.Entities;
 using InvoiceTool.Domain.Enums;
 using InvoiceTool.Infrastructure.Persistence;
 
@@ -6,128 +7,80 @@ namespace InvoiceTool.Mvc.Data;
 
 public static class DemoDataSeeder
 {
-    private static readonly string[] FirstNames =
-    {
-        "Jan", "Piet", "Klaas", "Sanne", "Lisa", "Tom", "Emma", "Noah", "Lotte", "Daan"
-    };
-
-    private static readonly string[] LastNames =
-    {
-        "Jansen", "De Vries", "Bakker", "Visser", "Smit", "Meijer", "Bos", "Mulder"
-    };
-
-    private static readonly string[] CompanySuffixes =
-    {
-        "Solutions", "Consultancy", "Trading", "Group", "Services", "Logistics"
-    };
-
-    private static readonly string[] Streets =
-    {
-        "Dorpsstraat", "Kerklaan", "Stationsweg", "Hoofdstraat", "Industrieweg"
-    };
-
-    private static readonly string[] Cities =
-    {
-        "Amsterdam", "Utrecht", "Rotterdam", "Eindhoven", "Groningen"
-    };
+    private static readonly int MinAmount = 1;
+    private static readonly int MaxAmount = 5;
+    private static List<Customer> _customers = new();
 
     public static void Seed(AppDbContext db)
     {
-        if (db.Customers.Any())
+        if (db.Customers.Any() || db.Invoices.Any())
             return;
 
-        if (db.Invoices.Any())
-            return;
-
-
-        var random = new Random();
-
-        var customers = Enumerable.Range(1, 10)
-            .Select(_ =>
-            {
-                var first = FirstNames[random.Next(FirstNames.Length)];
-                var last = LastNames[random.Next(LastNames.Length)];
-                var street = Streets[random.Next(Streets.Length)];
-                var city = Cities[random.Next(Cities.Length)];
-
-                return new Customer
-                {
-                    Name = $"{first} {last}",
-                    CompanyName = $"{last} {CompanySuffixes[random.Next(CompanySuffixes.Length)]}",
-                    Address = $"{street} {random.Next(1, 200)}",
-                    PostalCode = $"{random.Next(1000, 9999)} {((char)('A' + random.Next(26)))}{((char)('A' + random.Next(26)))}",
-                    City = city
-                };
-            })
-            .ToList();
-
-        db.Customers.AddRange(customers);
-        db.SaveChanges();
-
-
-        SeedInvoicesForYear(db, customers, random, 2024, 20);
-        SeedInvoicesForYear(db, customers, random, 2025, 20);
+        CreateFakeCustomers(db);
+        CreateFakeInvoices(db);
 
         db.SaveChanges();
     }
 
-    private static void SeedInvoicesForYear(AppDbContext db, List<Customer> customers, Random random, int year, int invoiceCount)
+    private static void CreateFakeCustomers(AppDbContext db)
     {
-        var invoicesPerMonth = invoiceCount / 12;
-        var remainder = invoiceCount % 12;
+        var customerFaker = new Faker<Customer>("nl")
+            .RuleFor(c => c.Name, f => f.Name.FullName())
+            .RuleFor(c => c.CompanyName, f => f.Company.CompanyName())
+            .RuleFor(c => c.Address, f => f.Address.StreetAddress())
+            .RuleFor(c => c.PostalCode, f => f.Address.ZipCode("#### ??"))
+            .RuleFor(c => c.City, f => f.Address.City());
 
-        int invoiceNumber = 1;
+        _customers = customerFaker.Generate(10);
 
-        for (int month = 1; month <= 12; month++)
-        {
-            var countThisMonth = invoicesPerMonth + (month <= remainder ? 1 : 0);
+        db.Customers.AddRange(_customers);
 
-            for (int i = 0; i < countThisMonth; i++)
+        db.SaveChanges();
+    }
+
+    private static void CreateFakeInvoices(AppDbContext db)
+    {
+        var invoiceNumber = 1;
+        var invoiceFaker = new Faker<Invoice>("nl")
+            .RuleFor(i => i.Date, f => f.Date.Past(2))
+            .RuleFor(i => i.PaymentStatus, f => f.Random.Bool(0.7f) ? PaymentStatus.Completed : PaymentStatus.Pending)
+            .RuleFor(i => i.Number, (f, i) => $"INV{i.Date.Year}{invoiceNumber++:000}")
+            .RuleFor(i => i.InvoiceLines, (f, i) =>
             {
-                var date = new DateTime(
-                    year,
-                    month,
-                    random.Next(1, DateTime.DaysInMonth(year, month) + 1));
-
-                var isPaid = random.NextDouble() < 0.7;
-
-                var invoice = new Invoice
+                var lines = new List<InvoiceLine>();
+                var lineCount = f.Random.Int(2, 5);
+                for (int l = 1; l <= lineCount; l++)
                 {
-                    Number = $"INV{year}{invoiceNumber++:000}",
-                    Date = date,
-                    ExpirationDate = date.AddDays(30),
-                    CustomerId = customers[random.Next(customers.Count)].Id,
-                    PaymentStatus = isPaid
-                        ? PaymentStatus.Completed
-                        : PaymentStatus.Pending
-                };
+                    lines.Add(new InvoiceLine
+                    {
+                        Description = f.Commerce.ProductName(),
+                        Quantity = f.Random.Int(MinAmount, MaxAmount),
+                        UnitPrice = f.Random.Decimal(50, 250),
+                        TaxPercentage = 21,
+                        Invoice = i
+                    });
+                }
+                return lines;
+            });
 
-                invoice.InvoiceLines = CreateInvoiceLines(invoice, random);
-                CalculateTotals(invoice);
+        foreach (var year in new[] { 2024, 2025 })
+        {
+            for (int month = 1; month <= 12; month++)
+            {
+                var invoicesThisMonth = new Faker().Random.Int(MinAmount, MaxAmount);
+                for (int j = 0; j < invoicesThisMonth; j++)
+                {
+                    var invoice = invoiceFaker.Generate();
+                    invoice.Date = new DateTime(year, month, new Random().Next(1, DateTime.DaysInMonth(year, month) + 1));
+                    invoice.ExpirationDate = invoice.Date.AddDays(30);
+                    invoice.CustomerId = _customers[new Random().Next(_customers.Count)].Id;
 
-                db.Invoices.Add(invoice);
+                    CalculateTotals(invoice);
+
+                    db.Invoices.Add(invoice);
+                }
             }
         }
-    }
-
-    private static List<InvoiceLine> CreateInvoiceLines(Invoice invoice, Random random)
-    {
-        var lines = new List<InvoiceLine>();
-        var lineCount = random.Next(2, 6);
-
-        for (int i = 1; i <= lineCount; i++)
-        {
-            lines.Add(new InvoiceLine
-            {
-                Description = $"Dienst {i}",
-                Quantity = random.Next(1, 5),
-                UnitPrice = random.Next(50, 250),
-                TaxPercentage = 21,
-                Invoice = invoice
-            });
-        }
-
-        return lines;
     }
 
     private static void CalculateTotals(Invoice invoice)
