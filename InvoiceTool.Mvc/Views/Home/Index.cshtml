@@ -1,16 +1,51 @@
-﻿@using InvoiceTool.Application.UseCases.Statistics.Results
+﻿@using InvoiceTool.Mvc.ViewModels.Home
 
-@model MonthlyRevenueResult
+@model DashboardViewModel
 
 <h1><a href="#"></a></h1>
 
-<canvas id="revenueChart" class="revenueChart" height="100  "></canvas>
+<div class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="card dashboard-card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Total sales this year</h5>
+                <p class="card-text">
+                    @Model.TotalSalesThisYear.ToString("C0")
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card dashboard-card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Total sales this month</h5>
+                <p class="card-text">
+                    @Model.TotalSalesThisMonth.ToString("C0")
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card dashboard-card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Total pending invoices</h5>
+                <p class="card-text">
+                    @Model.TotalPendingInvoices.ToString()
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<canvas id="revenueChart" class="revenueChart" height="100"></canvas>
 
 <script>
-    const labels = @Html.Raw(Json.Serialize(Model.Labels));
+    const labels = @Html.Raw(Json.Serialize(Model.MonthlyRevenueResult.Labels));
     const datasets = [];
 
-    for (const [year, values] of Object.entries(@Html.Raw(Json.Serialize(Model.YearValues))))
+    for (const [year, values] of Object.entries(@Html.Raw(Json.Serialize(Model.MonthlyRevenueResult.YearValues))))
     {
         datasets.push({
             label: year,

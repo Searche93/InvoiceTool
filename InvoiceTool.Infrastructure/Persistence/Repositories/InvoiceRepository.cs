@@ -78,6 +78,7 @@ internal class InvoiceRepository(AppDbContext context) : IInvoiceRepository
             .AsNoTracking()
             .Where(i => i.Number.Contains(searchInput))
             .ToListAsync();
+
         return invoices ?? new List<Invoice>();
     }
 }

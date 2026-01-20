@@ -248,3 +248,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     display: block;
     width: 100%;
 }
+
+.dashboard-card {
+    background-color: var(--custom-purple-light);
+    padding: .5em;
+    color: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+}

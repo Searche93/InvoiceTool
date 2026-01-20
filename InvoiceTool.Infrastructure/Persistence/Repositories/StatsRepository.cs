@@ -29,4 +29,35 @@ internal class StatsRepository(AppDbContext context) : IStatsRepository
 
         return monthlyTotals;
     }
+
+    public async Task<decimal> TotalSalesByYear(int year)
+    {
+        var result = await _context.Invoices
+            .Where(i => i.PaymentStatus == PaymentStatus.Completed && i.Date.Year == year)
+            .SumAsync(i => i.GrossPrice);
+
+        return result;
+    }
+
+    public async Task<decimal> TotalSalesByMonth(int month)
+    {
+        var result = await _context.Invoices
+            .Where(i => 
+                i.PaymentStatus == PaymentStatus.Completed && 
+                i.Date.Year == DateTime.Now.Year &&
+                i.Date.Month == month
+            )
+            .SumAsync(i => i.GrossPrice);
+
+        return result;
+    }
+
+    public async Task<int> TotalPendingInvoices()
+    {
+        var result = await _context.Invoices
+            .Where(i => i.PaymentStatus == PaymentStatus.Pending)
+            .CountAsync();
+
+        return result;
+    }
 }

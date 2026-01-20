@@ -63,15 +63,29 @@ public static class DemoDataSeeder
                 return lines;
             });
 
-        foreach (var year in new[] { 2024, 2025 })
+
+        var currentYear = DateTime.Today.Year;
+        var currentMonth = DateTime.Today.Month;
+
+        var startYear = currentYear - 2;
+
+        for (int year = startYear; year <= currentYear; year++)
         {
-            for (int month = 1; month <= 12; month++)
+            var maxMonth = (year == currentYear) ? currentMonth : 12;
+
+            for (var month = 1; month <= maxMonth; month++)
             {
                 var invoicesThisMonth = new Faker().Random.Int(MinAmount, MaxAmount);
-                for (int j = 0; j < invoicesThisMonth; j++)
+
+                for (var j = 0; j < invoicesThisMonth; j++)
                 {
                     var invoice = invoiceFaker.Generate();
-                    invoice.Date = new DateTime(year, month, new Random().Next(1, DateTime.DaysInMonth(year, month) + 1));
+
+                    var day = (year == currentYear && month == currentMonth)
+                                ? new Random().Next(1, DateTime.Today.Day + 1)
+                                : new Random().Next(1, DateTime.DaysInMonth(year, month) + 1);
+
+                    invoice.Date = new DateTime(year, month, day);
                     invoice.ExpirationDate = invoice.Date.AddDays(30);
                     invoice.CustomerId = _customers[new Random().Next(_customers.Count)].Id;
 
